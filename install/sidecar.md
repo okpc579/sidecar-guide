@@ -540,8 +540,8 @@ $ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=roo
 | 1.storageclass-config.sh | Sidecar 설치 시 사용 할 Storageclass를 default로 정의하는 스크립트 ||
 | 2.generate-values.sh | Sidecar 설치 시 사용 할 비밀번호, certificate등의 설정을 갖고있는 Manifest를 생성하는 스크립트 ||
 | 3.rendering-values.sh | 비밀번호, certificate등의 설정을 갖고있는 Manifest를 활용해 YAML을 생성하는 스크립트 ||
-| 4.deploy-cffork8s.sh | 생성된 YAML을 이용하여 Sidecar를 설치하는 스크립트 ||
-| delete-cffork8s.sh | Sidecar를 삭제하는 스크립트 ||
+| 4.deploy-sidecar.sh | 생성된 YAML을 이용하여 Sidecar를 설치하는 스크립트 ||
+| delete-sidecar.sh | Sidecar를 삭제하는 스크립트 ||
 | deploy-ebs-sc.sh | EBS Storageclass를 배포하는 스크립트 | AWS EBS 사용 시 적용|
 | inject-self-signed-certificate.sh | 자체 서명된 인증서를 사용하는 Private 레지스트리 사용 시 POD에 CA를 삽입하는 보조 스크립트 | 자세한 가이드는 inject-self-signed-certificate.sh 파일 안 설명이나 [cert-injection-webhook](https://github.com/vmware-tanzu/cert-injection-webhook) 참고 |
 | install-test.sh | 설치 후 Test App을 배포하여 확인하는 스크립트 ||
@@ -572,7 +572,7 @@ $ vi variables.yml ## 수정필요
 
 ## COMMON VARIABLE
 iaas=aws                                                    # IaaS (e.g. aws or openstack)
-system_domain=cffork8s.com                                  # cffork8s system_domain (e.g. 3.35.135.135.nip.io)
+system_domain=sidecar.com                                   # sidecar system_domain (e.g. 3.35.135.135.nip.io)
 use_lb=true                                                 # (e.g. true or false)
 public_ip=3.35.135.135                                      # LoadbalancerIP (PublicIP associcated with system_domain, if use openstack)
 storageclass_name=ebs-sc                                    # Storage Class Name ($ kubectl get sc) (e.g. ebs-sc[use aws] || cinder-csi[use openstack])
@@ -736,7 +736,7 @@ metadata:
 ## <div id='3.7'> 3.7. Sidecar 설치
 - 생성된 YAML파일을 이용하여 Sidecar를 설치한다.
 ```
-$ source 4.deploy-cffork8s.sh
+$ source 4.deploy-sidecar.sh
 
 ........
 6:43:21AM:  L ok: waiting on pod/restart-workloads-for-istio1-11-1-pmtlv (v1) namespace: cf-workloads

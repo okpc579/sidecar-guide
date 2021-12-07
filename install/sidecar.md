@@ -1,4 +1,4 @@
-### [Index](https://github.com/okpc579/paasta-guide-new/blob/main/README.md) > [PaaS-TA Sidecar Install](../README.md) > Multi Cluster
+### [Index](https://github.com/okpc579/paasta-guide-new/blob/main/README.md) > [PaaS-TA Sidecar Install](./README.md) > Multi Cluster
 
 ## Table of Contents
 
@@ -929,4 +929,4 @@ $ source delete-sidecar.sh
 <br>
 
   
-### [Index](https://github.com/okpc579/paasta-guide-new/blob/main/README.md) > [PaaS-TA Sidecar Install](../README.md) > Multi Cluster
+### [Index](https://github.com/okpc579/paasta-guide-new/blob/main/README.md) > [PaaS-TA Sidecar Install](./README.md) > Multi Cluster

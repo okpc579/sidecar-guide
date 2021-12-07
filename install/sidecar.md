@@ -141,7 +141,7 @@ AWS에 Sidecar용도의 Kubernetes Cluster를 구성 할 경우 LoadBalancer나 
 key = kubernetes.io/cluster/{cluster_name}
 value = member
 ```
-![99](./images/cf_for_k8s/tags.png)
+![99](./images/sidecar/tags.png)
 
 <br>
 
@@ -802,7 +802,7 @@ istio-ingressgateway   LoadBalancer   10.233.28.216   a0c35cf15801c4557a9b49b3a9
 
 - Route53에서 호스팅 영역을 생성한 뒤 라우팅 대상에 LoadBalancer 이름(EXTERNAL-IP)를 입력하고 레코드를 생성한다.
 
-![route53](./images/cf_for_k8s/route53.PNG)
+![route53](./images/sidecar/route53.PNG)
 
 <br>
 

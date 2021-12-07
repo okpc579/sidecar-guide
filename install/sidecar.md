@@ -23,7 +23,7 @@
   2.9. [Kubernetes Cluster 사용 설정 & 설치 확인](#2.9)  
     ※ [(참고) Kubespray 사용 Kubernetes Cluster 삭제](#2.9.1)  
 
-3. [Sidecar 설치](#3)  
+3. [PaaS-TA Sidecar 설치](#3)  
   3.1. [실행파일 소개](#3.1)  
   3.2. [실행파일 다운로드](#3.2)  
   3.3. [variable 설정](#3.3)  
@@ -517,7 +517,7 @@ $ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=roo
 
 <br>
 
-# <div id='3'> 3. Sidecar 설치
+# <div id='3'> 3. PaaS-TA Sidecar 설치
 ## <div id='3.1'> 3.1. 실행파일 소개
 - Sidecar를 설치 & 활용하기 위해선 다음과 같은 실행파일이 필요하다.
 

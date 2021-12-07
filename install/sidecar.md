@@ -550,11 +550,11 @@ $ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=roo
 
 ## <div id='3.2'> 3.2. 실행파일 다운로드
 
-- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 베타 버전이다. ## 수정필요
+- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 베타 버전이다.
 ```
 $ cd $HOME
-$ git clone ~~~~.git -b ~~~
-$ cd ~~~~~~~
+$ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b beta ##수정필요
+$ cd sidecar-deployment
 ```
 
 <br>

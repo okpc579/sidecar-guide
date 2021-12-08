@@ -229,7 +229,7 @@ kind: Config
 
 - 생성된 YAML파일을 이용하여 Sidecar를 설치한다.
 ```
-$ kapp deploy -a cf -f tmp/sidecar-rendered.yml -y
+$ kapp deploy -a sidecar -f tmp/sidecar-rendered.yml -y
 
 ......
 1:56:06AM: ongoing: reconcile job/restart-workloads-for-istio1-8-4 (batch/v1) namespace: cf-workloads
@@ -388,7 +388,7 @@ kind: Config
 
 - 생성된 YAML파일을 이용하여 sidecar를 설치한다.
 ```
-$ kapp deploy -a cf -f tmp/sidecar-rendered.yml -y
+$ kapp deploy -a sidecar -f tmp/sidecar-rendered.yml -y
 
 ........
 2:40:51AM:  L ok: waiting on pod/restart-workloads-for-istio1-8-4-lllwn (v1) namespace: cf-workloads

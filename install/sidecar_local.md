@@ -73,7 +73,7 @@ $ cd sidecar-deployment
 
 - ytt, kapp, bosh cli, cf cli 설치 ## 수정필요
 ```
-$ source cffork8s-install-script/utils-install.sh
+$ source install-scripts/utils-install.sh
 ```
 
 - docker 설치

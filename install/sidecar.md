@@ -554,7 +554,7 @@ $ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=roo
 ```
 $ cd $HOME
 $ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b beta ##수정필요
-$ cd sidecar-deployment
+$ cd sidecar-deployment/install-scripts
 ```
 
 <br>

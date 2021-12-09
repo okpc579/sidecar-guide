@@ -64,11 +64,11 @@ $ cd sidecar-deployment
 
 | 이름   |      설명      |
 |----------|-------------|
-| [ytt](https://carvel.dev/ytt/) | Sidecar를을 배포 시 사용 되는 YAML을 생성하는 툴 |
-| [kapp](https://carvel.dev/kapp/) | Sidecar를의 라이프사이클을 관리하는 툴 |
+| [ytt](https://carvel.dev/ytt/) | Sidecar을 배포 시 사용 되는 YAML을 생성하는 툴 |
+| [kapp](https://carvel.dev/kapp/) | Sidecar의 라이프사이클을 관리하는 툴 |
 | [kubectl](https://github.com/kubernetes/kubectl) | Kubernetes Cluster를 제어하는 툴 |
-| [bosh cli](https://github.com/cloudfoundry/bosh-cli) | Sidecar를에서 사용될 임의의 비밀번호와 certificate를 생성하는 툴 |
-| [cf cli](https://github.com/cloudfoundry/cli) (v7+) | Sidecar를와 상호 작용하는 툴 |
+| [bosh cli](https://github.com/cloudfoundry/bosh-cli) | Sidecar에서 사용될 임의의 비밀번호와 certificate를 생성하는 툴 |
+| [cf cli](https://github.com/cloudfoundry/cli) (v7+) | Sidecar와 상호 작용하는 툴 |
 | [docker](https://www.docker.com/) | 컨테이너 기반의 가상화 플랫폼 |
 
 - ytt, kapp, bosh cli, cf cli 설치 ## 수정필요

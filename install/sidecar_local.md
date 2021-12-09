@@ -43,7 +43,7 @@ minikube Document : [https://minikube.sigs.k8s.io/docs/](https://minikube.sigs.k
 cf-for-k8s 공식 문서에서는 Local Kubernetes Cluster 요구 조건을 다음과 같이 권고하고 있다.
 - 최소 4 CPU, 6GB Memory
 - 권장 6-8 CPU, 8-16GB Memory
-- OCI 호환 레지스트리 제공(e.g. [Docker Hub](https://hub.docker.com/), [Google container registry](https://cloud.google.com/container-registry),  [Azure container registry](https://hub.docker.com/), [Harbor](https://goharbor.io/), etc....)  
+- OCI 호환 레지스트리 제공 (e.g. [Docker Hub](https://hub.docker.com/), [Google container registry](https://cloud.google.com/container-registry),  [Azure container registry](https://hub.docker.com/), [Harbor](https://goharbor.io/), etc....)  
   본 가이드는 Docker Hub 기준으로 가이드가 진행된다. (계정가입 필요)
 
 <br>

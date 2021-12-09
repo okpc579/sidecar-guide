@@ -72,7 +72,8 @@ Kubernetes Cluster 구성을 위한 주요 소프트웨어 및 패키지 Version
 - Network Policies를 지원하는 CNI Plugin 보유
 - LoadBalancer Service 지원
 - Default StorageClass 지정
-- OCI 호환 레지스트리 제공
+- OCI 호환 레지스트리 제공 (e.g. [Docker Hub](https://hub.docker.com/), [Google container registry](https://cloud.google.com/container-registry),  [Azure container registry](https://hub.docker.com/), [Harbor](https://goharbor.io/), etc....)  
+  본 가이드는 Docker Hub 기준으로 가이드가 진행된다. (계정가입 필요)
 
 <br>
 

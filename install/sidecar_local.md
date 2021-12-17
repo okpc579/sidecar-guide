@@ -25,7 +25,7 @@
 <br>
 
 ## <div id='1.2'> 1.2. 범위
-본 문서는 [cf-for-k8s v5.3.0](https://github.com/cloudfoundry/cf-for-k8s/tree/v5.3.0)을 기준으로 작성하였다.  
+본 문서는 [cf-for-k8s v5.4.1](https://github.com/cloudfoundry/cf-for-k8s/tree/v5.4.1)을 기준으로 작성하였다.  
 본 문서는 [kind](https://kind.sigs.k8s.io/) 혹은 [minikube](https://minikube.sigs.k8s.io/docs/)로 Local Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.
 
 <br>

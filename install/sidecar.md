@@ -255,8 +255,7 @@ paasta-cp-master
 ## {MASTER_NODE_IP}, {WORKER_NODE_IP} : Master, Worker Node Private IP
 
 ex)
-$ hostname -i
-10.0.0.55
+$ ifconfig
 ...
 ```
 

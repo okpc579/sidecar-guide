@@ -67,7 +67,7 @@ cf-for-k8s Document : [https://cf-for-k8s.io/docs/](https://cf-for-k8s.io/docs/)
 ## <div id='2.1'> 2.1. Prerequisite
 Kubernetes Cluster 구성을 위한 주요 소프트웨어 및 패키지 Version 정보는 PaaS-TA Container Platform 단독 배포 설치 가이드에서 확인 가능하다.  
 추가로 cf-for-k8s 공식 문서에서는 Kubernetes Cluster 요구 조건을 다음과 같이 권고하고 있다.
-- Kubernetes version : 1.19 ~ 1.21
+- Kubernetes version : 1.19 ~ 1.22
 - 최소 5 노드
 - 노드 당 최소 4 CPU, 15GB Memory
 - Network Policies를 지원하는 CNI Plugin 보유

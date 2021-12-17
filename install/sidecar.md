@@ -185,7 +185,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5QrbqzV6g4iZT4iR1u+EKKVQGqBy4DbGqH7/PVfmA
 
 - 사용할 Master, Worker Node의 authorized_keys 파일 본문의 마지막 부분(기존 본문 내용 아래 추가)에 공개키를 복사한다.
 ```
-$ vi .ssh/authorized_keys
+$ vi ~/.ssh/authorized_keys
 
 ex)
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRueywSiuwyfmCSecHu7iwyi3xYS1xigAnhR/RMg/Ws3yOuwbKfeDFUprQR24BoMaD360uyuRaPpfqSL3LS9oRFrj0BSaQfmLcMM1+dWv+NbH/vvq7QWhIszVCLzwTqlHrhgNsh0+EMhqc15KEo5kHm7d7vLc0fB5tZkmovsUFzp01Ceo9+Qye6+j+UM6ssxdTmatoMP3ZZKZzUPF0EZwTcGG6+8rVK2G8GhTqwGLj9E+As3GB1YdOvr/fsTAi2PoxxFsypNR4NX8ZTDvRdAUzIxz8wv2VV4mADStSjFpE7HWrzr4tZUjvvVFptU4LbyON9YY4brMzjxA7kTuf/e3j Generated-by-Nova
@@ -344,7 +344,7 @@ cloud_provider: aws
 ...
 ```
 
-- AWS 환경 사용 시 EBS를 사용한다면 EBS에 대한 설정을 추가한다. (선택)
+- AWS 환경 사용 시 EBS를 사용한다면 EBS에 대한 설정을 추가한다.  
 ```
 $ vi inventory/mycluster/group_vars/all/aws.yml
 
@@ -636,7 +636,7 @@ external_db_cert_path=support-files/db.ca                   # if DB use cert -->
 ## <div id='3.4'> 3.4. Storageclass Default 설정
 Sidecar를 설치하기 위해서는 사용 중인 Storageclass를 default 설정 할 필요가 있다.
 
-- AWS 사용 시 EBS를 사용한다면 EBS Storageclass를 배포한다. (선택)
+- AWS 사용 시 EBS를 사용한다면 EBS Storageclass를 배포한다.  
 ```
 $ source deploy-ebs-sc.sh
 ```
@@ -843,7 +843,7 @@ Hello World
 
 
 # 배포 수동 테스트
-$ cf login -a api.$(grep system_domain ./tmp/sidecar-values.yml | cut -d" " -f2 | sed -e 's/\"//g') --skip-ssl-validation -u admin -p "$(grep cf_admin_password ./tmp/sidecar-values.yml | cut -d" " -f2)"
+$ cf login -a api.$(grep system_domain ./manifest/sidecar-values.yml | cut -d" " -f2 | sed -e 's/\"//g') --skip-ssl-validation -u admin -p "$(grep cf_admin_password ./manifest/sidecar-values.yml | cut -d" " -f2)"
 
 Authenticating...
 OK

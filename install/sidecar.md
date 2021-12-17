@@ -554,7 +554,7 @@ $ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=roo
 - git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 베타 버전이다.
 ```
 $ cd $HOME
-$ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b beta ##수정필요
+$ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b beta
 $ cd sidecar-deployment/install-scripts
 ```
 
@@ -569,7 +569,7 @@ $ source utils-install.sh
 ## <div id='3.3'> 3.3. variable 설정
 - variables.yml 파일을 편집하여 Sidecar 설치 시 옵션들을 설정한다.
 ```
-$ vi variables.yml ## 수정필요
+$ vi variables.yml
 
 ## COMMON VARIABLE
 iaas=aws                                                    # IaaS (e.g. aws or openstack)

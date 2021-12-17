@@ -672,7 +672,7 @@ ebs-sc (default)   ebs.csi.aws.com   Delete          WaitForFirstConsumer   fals
 
 ## <div id='3.5'> 3.5. Sidecar values 생성
 - Sidecar 설치 시 사용 할 values를 생성하는 스크립트를 실행한다.  
-  (variables.yml을 수정하였다면 2.generate-values.sh부터 재시작 한다.)
+  (설치 중 variables.yml을 수정하였다면 2.generate-values.sh부터 재시작 한다.)
 ```
 $ source 2.generate-values.sh
 ```
@@ -711,7 +711,7 @@ app_registry:
 ## <div id='3.6'> 3.6. Sidecar 배포 YAML 생성
 
 - 만들어진 sidecar-values.yml 파일을 이용하여 Sidecar를 설치할 YAML을 렌더링하여 생성한다.  
-  (sidecar-values.yml을 수정하였다면 3.rendering-values.sh부터 재시작 한다.)
+  (설치 중 sidecar-values.yml을 수정하였다면 3.rendering-values.sh부터 재시작 한다.)
 ```
 $ source 3.rendering-values.sh
 ```

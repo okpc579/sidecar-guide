@@ -544,7 +544,8 @@ $ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=roo
 | 4.deploy-sidecar.sh | 생성된 YAML을 이용하여 Sidecar를 설치하는 스크립트 ||
 | delete-sidecar.sh | Sidecar를 삭제하는 스크립트 ||
 | deploy-ebs-sc.sh | EBS Storageclass를 배포하는 스크립트 | AWS EBS 사용 시 적용|
-| inject-self-signed-certificate.sh | 자체 서명된 인증서를 사용하는 Private 레지스트리 사용 시 POD에 CA를 삽입하는 보조 스크립트 | 자세한 가이드는 inject-self-signed-certificate.sh 파일 안 설명이나 [cert-injection-webhook](https://github.com/vmware-tanzu/cert-injection-webhook) 참고 |
+| deploy-inject-self-signed-cert.sh | 자체 서명된 인증서를 사용하는 Private 레지스트리 사용 시 POD에 CA를 삽입하는 보조 스크립트 | 자세한 가이드는 deploy-inject-self-signed-cert.sh 파일 안 설명이나 [cert-injection-webhook](https://github.com/vmware-tanzu/cert-injection-webhook) 참고 |
+| delete-inject-self-signed-cert.sh | inject-self-signed-cert를 삭제하는 스크립트 |  |
 | install-test.sh | 설치 후 Test App을 배포하여 확인하는 스크립트 ||
 
 <br>

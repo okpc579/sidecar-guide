@@ -42,7 +42,7 @@
 <br>
 
 ## <div id='1.2'> 1.2. 범위
-본 문서는 [cf-for-k8s v5.4.1](https://github.com/cloudfoundry/cf-for-k8s/tree/v5.4.1), [paas-ta-container-platform v1.1.0](https://github.com/PaaS-TA/paas-ta-container-platform/tree/v1.1.0)을 기준으로 작성하였다.    
+본 문서는 [cf-for-k8s v5.4.2](https://github.com/cloudfoundry/cf-for-k8s/tree/v5.4.2), [paas-ta-container-platform v1.1.0](https://github.com/PaaS-TA/paas-ta-container-platform/tree/v1.1.0)을 기준으로 작성하였다.    
 본 문서는 AWS, Openstack 환경에 PaaS-TA Container-Platform 단독 배포(Kubespray)를 활용하여 Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.  
 본 문서는 IaaS, Kubernetes에 대한 기본 이해도가 있다는 전제하에 가이드를 진행하였다.  
 

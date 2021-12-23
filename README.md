@@ -1,4 +1,4 @@
-## PaaS-TA Application Platform (AP) Guide
+## PaaS-TA Sidecar Guide
 
 |Deployment|Current Version| 
 |-------------|-------------|

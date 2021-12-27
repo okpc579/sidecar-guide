@@ -678,7 +678,8 @@ $ source 2.generate-values.sh
 ```
 <br>
 
-- Manifest 파일은 manifest/sidecar-values.yml 에 생성되며 각종 values를 확인, 수정 가능하다.
+- Manifest 파일은 manifest/sidecar-values.yml 에 생성되며 각종 values를 확인, 수정 가능하다.   
+  (사용 가능한 변수는 [링크](https://cf-for-k8s.io/docs/platform_operators/config-values/) 에서 확인한다.)
 
 ```
 $ vi manifest/sidecar-values.yml

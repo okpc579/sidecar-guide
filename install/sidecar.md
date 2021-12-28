@@ -1,4 +1,4 @@
-### [Index](https://github.com/okpc579/paasta-guide-new/blob/main/README.md) > [PaaS-TA Sidecar Install](./README.md) > Sidecar
+### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [PaaS-TA Sidecar Install](./README.md) > Sidecar
 
 ## Table of Contents
 
@@ -927,4 +927,4 @@ $ source delete-sidecar.sh
 <br>
 
   
-### [Index](https://github.com/okpc579/paasta-guide-new/blob/main/README.md) > [PaaS-TA Sidecar Install](./README.md) > Sidecar
+### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [PaaS-TA Sidecar Install](./README.md) > Sidecar

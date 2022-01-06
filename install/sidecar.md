@@ -149,27 +149,27 @@ value = member
 <br>
 
 ### <div id='2.2.1'> ※ (참고) AWS IAM 설정
-AWS IAM 설정 방법을 기술하였다.
+AWS IAM 설정 방법을 기술하였다.  
 
-- AWS IAM 메뉴 - 역할 메뉴에서 역할 만들기을 선택한다.
+- AWS IAM 메뉴 - 역할 메뉴에서 역할 만들기을 선택한다.  
 ![IAM_01](./images/sidecar/IAM_01.PNG)
   
-- 역할 만들기를 진행하여 정책 생성을 선택한다.
+- 역할 만들기를 진행하여 정책 생성을 선택한다.  
 ![IAM_02](./images/sidecar/IAM_02.PNG)
   
-- JSON을 선택하여 상단의 iam_policy.json를 붙여넣고 진행한다.
+- JSON을 선택하여 상단의 iam_policy.json를 붙여넣고 진행한다.  
 ![IAM_03](./images/sidecar/IAM_03.PNG)
   
-- 정책을 생성 후 역할 만들기로 돌아가 생성한 정책을 선택한다.
+- 정책을 생성 후 역할 만들기로 돌아가 생성한 정책을 선택한다.  
 ![IAM_04](./images/sidecar/IAM_04.PNG)
   
-- 이름을 정하고 역할 만들기를 완료한다.
+- 이름을 정하고 역할 만들기를 완료한다.  
 ![IAM_05](./images/sidecar/IAM_05.PNG)
   
-- EC2 인스턴스를 구성시 IAM 역할에 만들었던 역할을 선택한다.
+- EC2 인스턴스를 구성시 IAM 역할에 만들었던 역할을 선택한다.  
 ![IAM_06](./images/sidecar/IAM_06.PNG)
   
-- 만약 인스턴스를 구성 완료했는데 IAM을 설정 안했다면, 인스턴스 - 작업 - 보안 - IAM 역할 수정을 선택하여 만들었던 역할을 선택후 인스턴스를 재 부팅한다.
+- 만약 인스턴스를 구성 완료했는데 IAM을 설정 안했다면, 인스턴스 - 작업 - 보안 - IAM 역할 수정을 선택하여 만들었던 역할을 선택후 인스턴스를 재 부팅한다.  
 ![IAM_07](./images/sidecar/IAM_07.png)
   
 <br>

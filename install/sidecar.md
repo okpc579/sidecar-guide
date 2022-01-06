@@ -10,6 +10,7 @@
 2. [Kubespray 사용 Kubernetes Cluster 구성](#2)  
   2.1. [Prerequisite](#2.1)  
   2.2. [AWS 설정 (AWS 환경 사용 시)](#2.2)  
+    ※ [(참고) AWS IAM 설정](#2.2.1)  
   2.3. [SSH Key 생성 및 배포](#2.3)  
   2.4. [Kubespray 다운로드](#2.4)  
   2.5. [Ubuntu, Python Package 설치](#2.5)  
@@ -80,7 +81,7 @@ Kubernetes Cluster 구성을 위한 주요 소프트웨어 및 패키지 Version
 
 ## <div id='2.2'> 2.2. AWS 설정 (AWS 환경 사용 시)
 AWS에 Sidecar용도의 Kubernetes Cluster를 구성 할 경우 LoadBalancer나 Storage의 사용을 위하여 Cluster를 구성하는 인스턴스에 IAM 권한이 필요하다.
-- IAM 역할을 생성하고 다음 정책을 추가한 뒤, 인스턴스 생성 시 적용한다.
+- IAM 역할을 생성하고 다음 정책을 추가한 뒤, 인스턴스 생성 시 적용한다. (IAM 설정에 관한 보충설명을 확인할 경우 하단의 AWS IAM 설정을 참고한다.)
 ```
 # iam_policy.json
 
@@ -147,6 +148,32 @@ value = member
 
 <br>
 
+### <div id='2.2.1'> ※ (참고) AWS IAM 설정
+AWS IAM 설정 방법을 기술하였다.  
+
+- AWS IAM 메뉴 - 역할 메뉴에서 역할 만들기을 선택한다.  
+![IAM_01](./images/sidecar/IAM_01.PNG)
+  
+- 역할 만들기를 진행하여 정책 생성을 선택한다.  
+![IAM_02](./images/sidecar/IAM_02.PNG)
+  
+- JSON을 선택하여 상단의 iam_policy.json를 붙여넣고 진행한다.  
+![IAM_03](./images/sidecar/IAM_03.PNG)
+  
+- 정책을 생성 후 역할 만들기로 돌아가 생성한 정책을 선택한다.  
+![IAM_04](./images/sidecar/IAM_04.PNG)
+  
+- 이름을 정하고 역할 만들기를 완료한다.  
+![IAM_05](./images/sidecar/IAM_05.PNG)
+  
+- EC2 인스턴스를 구성시 IAM 역할에 만들었던 역할을 선택한다.  
+![IAM_06](./images/sidecar/IAM_06.PNG)
+  
+- 만약 인스턴스를 구성 완료했는데 IAM을 설정 안했다면, 인스턴스 - 작업 - 보안 - IAM 역할 수정을 선택하여 만들었던 역할을 선택후 인스턴스를 재 부팅한다.  
+![IAM_07](./images/sidecar/IAM_07.png)
+  
+<br>
+  
 ## <div id='2.3'> 2.3. SSH Key 생성 및 배포
 SSH Key 생성 및 배포 이후의 모든 설치과정은 Master Node에서 진행한다.
 
@@ -615,9 +642,9 @@ external_db_cert_path=support-files/db.ca                   # if DB use cert -->
 | 이름   |      설명      |
 |----------|-------------|
 | iaas | Cluster가 구성된 IaaS (aws, openstack) |
-| system_domain | Sidecar의 도메인 |
-| use_lb | LoadBalancer 사용 여부 (사용 안할 시 system_domain을 Cluster Worker의 PublicIP와 연결된 system_domain으로 설정) <br> (e.g. Cluster Worker Floating IP : 3.50.50.50 -> system_domain : 3.50.50.50.nip.io 혹은 연결된 도메인 설정)|
-| public_ip | LoadBalancer의 IP(Openstack의 Octavia 사용 시) |
+| system_domain | Sidecar의 도메인(LoadBalancer와 연결되는 Domain) |
+| use_lb | LoadBalancer 사용 여부 (사용 안할 시 system_domain을 Cluster Worker중 하나의 PublicIP와 연결된 system_domain으로 설정) <br> (e.g. Cluster Worker Floating IP : 3.50.50.50 -> system_domain : 3.50.50.50.nip.io 혹은 연결된 도메인 설정)|
+| public_ip | LoadBalancer의 IP(클라우드 공급자가 제공하는 로드밸런서가 IP를 사용할 경우 설정) <br> (e.g. Openstack의 Octavia 사용 시) |
 | storageclass_name | 사용할 Storageclass (Openstack : cinder-csi, AWS : ebs-sc) |
 | app_registry_kind | Registry 종류 (dockerhub, private) |
 | app_registry_address | app_registry_kind가 private일 경우 Registry 주소 입력 |

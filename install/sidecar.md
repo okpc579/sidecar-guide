@@ -615,9 +615,9 @@ external_db_cert_path=support-files/db.ca                   # if DB use cert -->
 | 이름   |      설명      |
 |----------|-------------|
 | iaas | Cluster가 구성된 IaaS (aws, openstack) |
-| system_domain | Sidecar의 도메인 |
-| use_lb | LoadBalancer 사용 여부 (사용 안할 시 system_domain을 Cluster Worker의 PublicIP와 연결된 system_domain으로 설정) <br> (e.g. Cluster Worker Floating IP : 3.50.50.50 -> system_domain : 3.50.50.50.nip.io 혹은 연결된 도메인 설정)|
-| public_ip | LoadBalancer의 IP(Openstack의 Octavia 사용 시) |
+| system_domain | Sidecar의 도메인(LoadBalancer와 연결되는 Domain) |
+| use_lb | LoadBalancer 사용 여부 (사용 안할 시 system_domain을 Cluster Worker중 하나의 PublicIP와 연결된 system_domain으로 설정) <br> (e.g. Cluster Worker Floating IP : 3.50.50.50 -> system_domain : 3.50.50.50.nip.io 혹은 연결된 도메인 설정)|
+| public_ip | LoadBalancer의 IP(클라우드 공급자가 제공하는 로드밸런서가 IP를 사용할 경우 설정) <br> (e.g. Openstack의 Octavia 사용 시) |
 | storageclass_name | 사용할 Storageclass (Openstack : cinder-csi, AWS : ebs-sc) |
 | app_registry_kind | Registry 종류 (dockerhub, private) |
 | app_registry_address | app_registry_kind가 private일 경우 Registry 주소 입력 |

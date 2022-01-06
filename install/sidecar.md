@@ -81,7 +81,7 @@ Kubernetes Cluster 구성을 위한 주요 소프트웨어 및 패키지 Version
 
 ## <div id='2.2'> 2.2. AWS 설정 (AWS 환경 사용 시)
 AWS에 Sidecar용도의 Kubernetes Cluster를 구성 할 경우 LoadBalancer나 Storage의 사용을 위하여 Cluster를 구성하는 인스턴스에 IAM 권한이 필요하다.
-- IAM 역할을 생성하고 다음 정책을 추가한 뒤, 인스턴스 생성 시 적용한다. (IAM 설정 경험이 없다면 하단의 2.2.1. AWS IAM 설정을 참고한다.)
+- IAM 역할을 생성하고 다음 정책을 추가한 뒤, 인스턴스 생성 시 적용한다. (IAM 설정에 관한 보충설명을 확인할 경우 하단의 AWS IAM 설정을 참고한다.)
 ```
 # iam_policy.json
 

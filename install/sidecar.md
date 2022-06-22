@@ -647,6 +647,7 @@ external_db_cert_path=support-files/db.ca                   # if DB use cert -->
 | public_ip | LoadBalancer의 IP(클라우드 공급자가 제공하는 로드밸런서가 IP를 사용할 경우 설정) <br> (e.g. Openstack의 Octavia 사용 시) |
 | storageclass_name | 사용할 Storageclass (Openstack : cinder-csi, AWS : ebs-sc) |
 | app_registry_kind | Registry 종류 (dockerhub, private) |
+| app_registry_repository | Repository 이름 (dockerhub 사용 시 app_registry_id와 같은 값을 입력) |
 | app_registry_address | app_registry_kind가 private일 경우 Registry 주소 입력 |
 | use_external_blobstore | 외부 블롭스토어(minIO)를 사용할 경우 (true, false)|
 | use_external_db | 외부 데이터베이스(postgres, mysql)를 사용할 경우 (true, false) |

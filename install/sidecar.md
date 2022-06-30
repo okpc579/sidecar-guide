@@ -33,18 +33,18 @@
   3.6. [Create Sidecar Deployment YAML](#3.6)  
   3.7. [Sidecar Installation](#3.7)  
   　※ [LoadBalancer Domain Connection During AWS-Based Sidecar Installation](#3.7.1)  
-  3.8. [Sidecar 로그인 및 테스트 앱 배포](#3.8)  
+  3.8. [Sidecar Login and Deployment of Test App](#3.8)  
     ※ [(Refer) Sidecar Deletion](#3.8.1)  
 
-# <div id='1'> 1. 문서 개요
-## <div id='1.1'> 1.1. 목적
-본 문서는 PaaS-TA Container-Platform 단독 배포 시 사용되는 Kubespray로 Kubenetes Cluster를 구성하고 해당 환경에서 PaaS-TA Sidecar(이하 Sidecar)를 설치하기 위한 가이드를 제공하는 데 목적이 있다.
+# <div id='1'> 1. Document Outline
+## <div id='1.1'> 1.1. Purpose
+The purpose of this document is to provide a guide for configuring the Kubenetes Cluster with Kubespray used for exclusive deployment of PaaS-TA Container-Platform and installing PaaS-TA Sidecar (hereinafter referred to as Sidecar) in the environment.
 
 <br>
 
-## <div id='1.2'> 1.2. 범위
-본 문서는 [cf-for-k8s v5.4.2](https://github.com/cloudfoundry/cf-for-k8s/tree/v5.4.2), [paas-ta-container-platform v1.1.0](https://github.com/PaaS-TA/paas-ta-container-platform/tree/v1.1.0)을 기준으로 작성하였다.    
-본 문서는 AWS, Openstack 환경에 PaaS-TA Container-Platform 단독 배포(Kubespray)를 활용하여 Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.  
+## <div id='1.2'> 1.2. Range
+This Document was written based on [cf-for-k8s v5.4.2](https://github.com/cloudfoundry/cf-for-k8s/tree/v5.4.2), [paas-ta-container-platform v1.1.0](https://github.com/PaaS-TA/paas-ta-container-platform/tree/v1.1.0).    
+This document is based on the installation of Sidecar after configuring the Kubernetes Cluster by utilizing PaaS-TA Container-Platform Single Distribution (Kubespray) in AWS and Openstack environments.  
 본 문서는 IaaS, Kubernetes에 대한 기본 이해도가 있다는 전제하에 가이드를 진행하였다.  
 
 <br>

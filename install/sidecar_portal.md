@@ -159,6 +159,7 @@ portal-web-user       started           web:1/1                                 
 ```
 
 Sidecar에 신뢰할 수 있는 인증서가 적용이 안되어있을 시 웹 유저 포탈에 접근하는 링크는 http로 접근이 필요하다.  
-이후 포탈 운영이나 설정에 대한 가이드는 다음 링크를 참조한다 - [링크](https://github.com/PaaS-TA/application-platform-guide/blob/master/install/portal/container_type.md#4-paas-ta-ap-portal-%EC%9A%B4%EC%98%81)
+이후 포탈 운영이나 설정에 대한 가이드는 다음 링크를 참조한다  
+[Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [AP Install]([../README.md](https://github.com/PaaS-TA/application-platform-guide/blob/master/install/README.md)) > [Portal Container Type](https://github.com/PaaS-TA/application-platform-guide/blob/master/install/portal/container_type.md) > [PaaS-TA AP Portal 운영](https://github.com/PaaS-TA/application-platform-guide/blob/master/install/portal/container_type.md#4)
 
 ### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [PaaS-TA Sidecar Install](./README.md) > Sidecar

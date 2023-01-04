@@ -50,10 +50,10 @@ cf-for-k8s 공식 문서에서는 Local Kubernetes Cluster 요구 조건을 다�
 
 ## <div id='2.2'> 2.2. 설치 파일 다운로드
 
-- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 베타 버전이다.
+- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v1.0.0 버전이다.
 ```
 $ cd $HOME
-$ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b beta
+$ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b v1.0.0
 $ cd sidecar-deployment
 ```
 

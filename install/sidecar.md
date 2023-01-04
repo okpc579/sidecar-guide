@@ -572,10 +572,10 @@ $ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=roo
 
 ## <div id='3.2'> 3.2. 실행파일 다운로드
 
-- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 beta3 버전이다.
+- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v1.0.0 버전이다.
 ```
 $ cd $HOME
-$ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b beta3
+$ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b v1.0.0
 $ cd sidecar-deployment/install-scripts
 ```
 
@@ -610,7 +610,10 @@ app_registry_address=harbor00.nip.io                        # if app_registry_ki
 is_self_signed_certificate=false                            # is private registry use self-signed certificate? (e.g. true or false)
 app_registry_cert_path=support-files/private-repository.ca  # if is_self_signed_certificate==true --> add the contents of the private-repository.ca file
                                                             # if is_self_signed_certificate==false --> private-repository.ca is empty
-
+## PORTAL Variable
+webuser_name="portal-web-user"
+uaa_client_portal_secret="clientsecret"
+  
 ## EXTERNAL BLOBSTORE VARIABLE (Option)
 use_external_blobstore=false                                # (e.g. true or false)
 external_blobstore_ip=192.50.50.50                          # Blobstore Address (e.g. 127.0.0.1)

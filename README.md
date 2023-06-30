@@ -2,4 +2,4 @@
 
 |Deployment|Current Version| 
 |-------------|-------------|
-|sidecar-deployment| [1.0.0](https://github.com/PaaS-TA/sidecar-deployment/releases/tag/v1.0.0) | 
+|sidecar-deployment| [1.0.2](https://github.com/PaaS-TA/sidecar-deployment/releases/tag/v1.0.2) | 

@@ -104,7 +104,7 @@ pod/influxdb-0   1/1     Running   0          1m
 Logging 서비스를 활성화 하기 위해서는 Sidecar 설정 중 일부를 변경해야 한다.  
 - `enable-logging-service.sh` 파일을 실행하여 Sidecar 설정을 변경한다.
 ```shell script
-$ cd $HOME/sidecar-deployment/install-scripts
+$ cd $HOME/sidecar-deployment/install-scripts/logging
 $ source enable-logging-service.sh
 ```
 

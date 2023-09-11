@@ -34,7 +34,7 @@ Paketo Buildpack Document : [https://paketo.io/docs/](https://paketo.io/docs/)
 
 # <div id='2'> 2. Portal 설치
 ## <div id='2.1'> 2.1. Prerequisite
-본 설치 가이드는 Kubernetes 환경에 Portal Infra (DB, Storage)를 POD의 형태로 배포하며, Poral App은 Sidecar에 배포를 진행한다.
+본 설치 가이드는 Kubernetes 환경에 Portal Infra (DB, Storage)를 POD의 형태로 배포하며, Portal App은 Sidecar에 배포를 진행한다.
 <br>
 
 ## <div id='2.2'> 2.2. Variable 설정  

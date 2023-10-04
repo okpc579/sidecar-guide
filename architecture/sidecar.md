@@ -1,7 +1,7 @@
-### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > PaaS-TA Sidecar Architecture
+### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > K-PaaS Sidecar Architecture
 
 ## 목적
-본 문서는 PaaS-TA Sidecar의 Architecture를 제공한다
+본 문서는 K-PaaS Sidecar의 Architecture를 제공한다
 <br><br>
 
 ## 시스템 구성도
@@ -20,10 +20,10 @@
 <br>
 
 ## 참고자료
-PaaS-TA 컨테이너 플랫폼 : [https://github.com/PaaS-TA/paas-ta-container-platform](https://github.com/PaaS-TA/paas-ta-container-platform)  
+K-PaaS 컨테이너 플랫폼 : [https://github.com/K-PaaS/container-platform](https://github.com/K-PaaS/container-platform)  
 Kubespray : [https://kubespray.io](https://kubespray.io)  
 Kubespray github : [https://github.com/kubernetes-sigs/kubespray](https://github.com/kubernetes-sigs/kubespray)  
 cf-for-k8s github : [https://github.com/cloudfoundry/cf-for-k8s](https://github.com/cloudfoundry/cf-for-k8s)  
 cf-for-k8s Document : [https://cf-for-k8s.io/docs/](https://cf-for-k8s.io/docs/)  
 
-### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > PaaS-TA Sidecar Architecture
+### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > K-PaaS Sidecar Architecture

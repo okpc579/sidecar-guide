@@ -244,6 +244,23 @@ $ kapp deploy -a sidecar -f tmp/sidecar-rendered.yml -y
 Succeeded
 ```
 
+- /etc/hosts에 사용할 도메인을 추가한다.
+```diff
+$ sudo vi /etc/hosts
+
+
++127.0.0.1 localhost api.vcap.me login.vcap.me uaa.vcap.me log-cache.vcap.me test-node-app.apps.vcap.me
+  
+# The following lines are desirable for IPv6 capable hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+```
+
 - Sidecar가 정상설치 되었는지 샘플앱을 통해 확인한다.
 
 ```

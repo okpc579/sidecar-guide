@@ -1,4 +1,4 @@
-### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [PaaS-TA Sidecar Install](./README.md) > Sidecar
+### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > [K-PaaS Sidecar Install](./README.md) > Sidecar
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@
   2.9. [Kubespray 설치 확인](#2.9)  
   　※ [(참고) Kubespray 삭제](#2.9.1)  
 
-3. [PaaS-TA Sidecar 설치](#3)  
+3. [K-PaaS Sidecar 설치](#3)  
   3.1. [실행파일 소개](#3.1)  
   3.2. [실행파일 다운로드](#3.2)  
   3.3. [Istio CNI Plugin 활성화](#3.3)  
@@ -41,20 +41,20 @@
 
 # <div id='1'> 1. 문서 개요
 ## <div id='1.1'> 1.1. 목적
-본 문서는 PaaS-TA Container-Platform 단독 배포 시 사용되는 Kubespray로 Kubenetes Cluster를 구성하고 해당 환경에서 PaaS-TA Sidecar(이하 Sidecar)를 설치하기 위한 가이드를 제공하는 데 목적이 있다.
+본 문서는 K-PaaS Container-Platform 단독 배포 시 사용되는 Kubespray로 Kubenetes Cluster를 구성하고 해당 환경에서 K-PaaS Sidecar(이하 Sidecar)를 설치하기 위한 가이드를 제공하는 데 목적이 있다.
 
 <br>
 
 ## <div id='1.2'> 1.2. 범위
-본 문서는 [cf-for-k8s v5.4.2](https://github.com/cloudfoundry/cf-for-k8s/tree/v5.4.2), [paas-ta-container-platform v1.4.0.1](https://github.com/PaaS-TA/paas-ta-container-platform/blob/master/install-guide/standalone/cp-cluster-install.md)을 기준으로 작성하였다.    
-본 문서는 Openstack 환경에 PaaS-TA Container-Platform 단독 배포(Kubespray)를 활용하여 Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.  
+본 문서는 [cf-for-k8s v5.4.2](https://github.com/cloudfoundry/cf-for-k8s/tree/v5.4.2), [container-platform v1.4.0.1](https://github.com/K-PaaS/container-platform/blob/master/install-guide/standalone/cp-cluster-install.md)을 기준으로 작성하였다.    
+본 문서는 Openstack 환경에 K-PaaS Container-Platform 단독 배포(Kubespray)를 활용하여 Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.  
 본 문서는 IaaS, Kubernetes에 대한 기본 이해도가 있다는 전제하에 가이드를 진행하였다.  
 
 <br>
 
 
 ## <div id='1.3'> 1.3. 참고자료
-PaaS-TA 컨테이너 플랫폼 : [https://github.com/PaaS-TA/paas-ta-container-platform](https://github.com/PaaS-TA/paas-ta-container-platform)  
+K-PaaS 컨테이너 플랫폼 : [https://github.com/K-PaaS/container-platform](https://github.com/K-PaaS/container-platform)  
 Kubespray : [https://kubespray.io](https://kubespray.io)  
 Kubespray github : [https://github.com/kubernetes-sigs/kubespray](https://github.com/kubernetes-sigs/kubespray)  
 cf-for-k8s github : [https://github.com/cloudfoundry/cf-for-k8s](https://github.com/cloudfoundry/cf-for-k8s)  
@@ -63,13 +63,13 @@ cf-for-k8s Document : [https://cf-for-k8s.io/docs/](https://cf-for-k8s.io/docs/)
 <br>
 
 # <div id='2'> 2. Kubespray 사용 Kubernetes Cluster 구성
-기본적인 Kubernetes Cluster 구성방법은 PaaS-TA Container Platform 단독 배포 설치 가이드를 따라가되 일부 옵션이나 IaaS상에서 수정할 부분이 존재한다.
+기본적인 Kubernetes Cluster 구성방법은 K-PaaS Container Platform 단독 배포 설치 가이드를 따라가되 일부 옵션이나 IaaS상에서 수정할 부분이 존재한다.
 본 가이드의 Kubernetes Cluster 구성은 위 링크된 단독 배포 설치 가이드를 간략하게 수정하였기 때문에 Kubernetes Cluster 구성에 대한 상세 설명은 링크된 단독 배포 설치 가이드를 참고한다.
 
 <br>
 
 ## <div id='2.1'> 2.1. Prerequisite
-Kubernetes Cluster 구성을 위한 주요 소프트웨어 및 패키지 Version 정보는 PaaS-TA Container Platform 단독 배포 설치 가이드에서 확인 가능하다.  
+Kubernetes Cluster 구성을 위한 주요 소프트웨어 및 패키지 Version 정보는 K-PaaS Container Platform 단독 배포 설치 가이드에서 확인 가능하다.  
 추가로 cf-for-k8s 공식 문서에서는 Kubernetes Cluster 요구 조건을 다음과 같이 권고하고 있다.
 - Kubernetes version : 1.19 ~ 1.22
 - 최소 5 노드
@@ -186,7 +186,7 @@ Linux Kernel 버전 **v5.9**부터 NFS에서 xattr이 지원되므로, 버전이
 - Linux Kernel 버전을 확인한다.
   ```
   $ uname -a
-  Linux paasta-cp-master 4.15.0-206-generic #217-Ubuntu SMP Fri Feb 3 19:10:13 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+  Linux kpaas-cp-master 4.15.0-206-generic #217-Ubuntu SMP Fri Feb 3 19:10:13 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
   ```
 
 - 다음 경로에서 Linux Kernel 버전을 업그레이드 하는 데 필요한 *.deb 파일 다운로드를 진행한다. 본 설치 가이드에서의 Linux Kernel 버전은 **v5.9**이다.
@@ -211,7 +211,7 @@ Linux Kernel 버전 **v5.9**부터 NFS에서 xattr이 지원되므로, 버전이
 - reboot 후 다시 접속하여 Linux Kernel 버전을 확인한다.
   ```
   $ uname -a
-  Linux paasta-cp-master 5.9.0-050900-generic #202010112230 SMP Sun Oct 11 22:34:01 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+  Linux kpaas-cp-master 5.9.0-050900-generic #202010112230 SMP Sun Oct 11 22:34:01 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
   ```
 
 ### <div id='2.3.2'> 2.3.2 NFS 설치
@@ -337,7 +337,7 @@ SSH Key 생성 및 배포 이후의 모든 설치과정은 **Master Node**에서
   Your identification has been saved in /home/ubuntu/.ssh/id_rsa.
   Your public key has been saved in /home/ubuntu/.ssh/id_rsa.pub.
   The key fingerprint is:
-  SHA256:pIG4/G309Dof305mWjdNz1OORx9nQgQ3b8yUP5DzC3w ubuntu@paasta-cp-master
+  SHA256:pIG4/G309Dof305mWjdNz1OORx9nQgQ3b8yUP5DzC3w ubuntu@kpaas-cp-master
   The key's randomart image is:
   +---[RSA 2048]----+
   |            ..= o|
@@ -357,7 +357,7 @@ SSH Key 생성 및 배포 이후의 모든 설치과정은 **Master Node**에서
   ## 출력된 공개키 복사
 
   $ cat ~/.ssh/id_rsa.pub
-  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5QrbqzV6g4iZT4iR1u+EKKVQGqBy4DbGqH7/PVfmAYEo3CcFGhRhzLcVz3rKb+C25mOne+MaQGynZFpZk4muEAUdkpieoo+B6r2eJHjBLopn5quWJ561H7EZb/GlfC5ThjHFF+hTf5trF4boW1iZRvUM56KAwXiYosLLRBXeNlub4SKfApe8ojQh4RRzFBZP/wNbOKr+Fo6g4RQCWrr5xQCZMK3ugBzTHM+zh9Ra7tG0oCySRcFTAXXoyXnJm+PFhdR6jbkerDlUYP9RD/87p/YKS1wSXExpBkEglpbTUPMCj+t1kXXEJ68JkMrVMpeznuuopgjHYWWD2FgjFFNkp ubuntu@paasta-cp-master
+  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5QrbqzV6g4iZT4iR1u+EKKVQGqBy4DbGqH7/PVfmAYEo3CcFGhRhzLcVz3rKb+C25mOne+MaQGynZFpZk4muEAUdkpieoo+B6r2eJHjBLopn5quWJ561H7EZb/GlfC5ThjHFF+hTf5trF4boW1iZRvUM56KAwXiYosLLRBXeNlub4SKfApe8ojQh4RRzFBZP/wNbOKr+Fo6g4RQCWrr5xQCZMK3ugBzTHM+zh9Ra7tG0oCySRcFTAXXoyXnJm+PFhdR6jbkerDlUYP9RD/87p/YKS1wSXExpBkEglpbTUPMCj+t1kXXEJ68JkMrVMpeznuuopgjHYWWD2FgjFFNkp ubuntu@kpaas-cp-master
   ```
 
 - 사용할 Master, Worker Node의 authorized_keys 파일 본문의 마지막 부분(기존 본문 내용 아래 추가)에 공개키를 복사한다.
@@ -366,14 +366,14 @@ SSH Key 생성 및 배포 이후의 모든 설치과정은 **Master Node**에서
 
   ex)
   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRueywSiuwyfmCSecHu7iwyi3xYS1xigAnhR/RMg/Ws3yOuwbKfeDFUprQR24BoMaD360uyuRaPpfqSL3LS9oRFrj0BSaQfmLcMM1+dWv+NbH/vvq7QWhIszVCLzwTqlHrhgNsh0+EMhqc15KEo5kHm7d7vLc0fB5tZkmovsUFzp01Ceo9+Qye6+j+UM6ssxdTmatoMP3ZZKZzUPF0EZwTcGG6+8rVK2G8GhTqwGLj9E+As3GB1YdOvr/fsTAi2PoxxFsypNR4NX8ZTDvRdAUzIxz8wv2VV4mADStSjFpE7HWrzr4tZUjvvVFptU4LbyON9YY4brMzjxA7kTuf/e3j Generated-by-Nova
-  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5QrbqzV6g4iZT4iR1u+EKKVQGqBy4DbGqH7/PVfmAYEo3CcFGhRhzLcVz3rKb+C25mOne+MaQGynZFpZk4muEAUdkpieoo+B6r2eJHjBLopn5quWJ561H7EZb/GlfC5ThjHFF+hTf5trF4boW1iZRvUM56KAwXiYosLLRBXeNlub4SKfApe8ojQh4RRzFBZP/wNbOKr+Fo6g4RQCWrr5xQCZMK3ugBzTHM+zh9Ra7tG0oCySRcFTAXXoyXnJm+PFhdR6jbkerDlUYP9RD/87p/YKS1wSXExpBkEglpbTUPMCj+t1kXXEJ68JkMrVMpeznuuopgjHYWWD2FgjFFNkp ubuntu@paasta-cp-master
+  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5QrbqzV6g4iZT4iR1u+EKKVQGqBy4DbGqH7/PVfmAYEo3CcFGhRhzLcVz3rKb+C25mOne+MaQGynZFpZk4muEAUdkpieoo+B6r2eJHjBLopn5quWJ561H7EZb/GlfC5ThjHFF+hTf5trF4boW1iZRvUM56KAwXiYosLLRBXeNlub4SKfApe8ojQh4RRzFBZP/wNbOKr+Fo6g4RQCWrr5xQCZMK3ugBzTHM+zh9Ra7tG0oCySRcFTAXXoyXnJm+PFhdR6jbkerDlUYP9RD/87p/YKS1wSXExpBkEglpbTUPMCj+t1kXXEJ68JkMrVMpeznuuopgjHYWWD2FgjFFNkp ubuntu@kpaas-cp-master
   ```
 <br>
 
 ## <div id='2.5'> 2.5. Kubespray 다운로드
-- git clone 명령을 통해 다음 경로에서 Kubespray 다운로드를 진행한다. 본 설치 가이드에서의 paas-ta-container-platform의 버전은 **v1.4.0.1**이며 Kubespray 버전은 **v2.20.0** 이다.
+- git clone 명령을 통해 다음 경로에서 Kubespray 다운로드를 진행한다. 본 설치 가이드에서의 container-platform의 버전은 **v1.4.0.1**이며 Kubespray 버전은 **v2.20.0** 이다.
   ```
-  $ git clone https://github.com/PaaS-TA/paas-ta-container-platform-deployment.git -b v1.4.0.1
+  $ git clone https://github.com/K-PaaS/container-platform-deployment.git -b v1.4.0.1
   ```
 
 <br>
@@ -384,7 +384,7 @@ Kubespray 설치에 필요한 환경변수를 사전 정의 후 쉘 스크립트
 
 - Kubespray 설치경로로 이동한다.
   ```
-  $ cd paas-ta-container-platform-deployment/standalone/single_control_plane
+  $ cd container-platform-deployment/standalone/single_control_plane
   ```
 
 - Kubespray 설치에 필요한 환경변수를 정의한다. HostName, IP 정보는 다음을 통해 확인할 수 있다.
@@ -489,11 +489,11 @@ Kubernetes Node 및 kube-system Namespace의 Pod를 확인하여 Kubespray 설�
 ```
 $ kubectl get nodes
 NAME                 STATUS   ROLES                  AGE   VERSION
-paasta-cp-master     Ready    control-plane          12m   v1.24.6
-paasta-cp-worker-1   Ready    <none>                 10m   v1.24.6
-paasta-cp-worker-2   Ready    <none>                 10m   v1.24.6
-paasta-cp-worker-3   Ready    <none>                 10m   v1.24.6
-paasta-cp-worker-4   Ready    <none>                 10m   v1.24.6
+kpaas-cp-master      Ready    control-plane          12m   v1.24.6
+kpaas-cp-worker-1    Ready    <none>                 10m   v1.24.6
+kpaas-cp-worker-2    Ready    <none>                 10m   v1.24.6
+kpaas-cp-worker-3    Ready    <none>                 10m   v1.24.6
+kpaas-cp-worker-4    Ready    <none>                 10m   v1.24.6
 
 $ kubectl get pods -n kube-system
 NAME                                          READY   STATUS    RESTARTS      AGE
@@ -504,17 +504,17 @@ calico-node-nc58v                             1/1     Running   0             10
 coredns-657959df74-td5c2                      1/1     Running   0             8m15s
 coredns-657959df74-ztnjj                      1/1     Running   0             8m7s
 dns-autoscaler-b5c786945-rhlkd                1/1     Running   0             8m9s
-kube-apiserver-paasta-cp-master               1/1     Running   0             12m
-kube-controller-manager-paasta-cp-master      1/1     Running   1 (11m ago)   12m
+kube-apiserver-kpaas-cp-master                1/1     Running   0             12m
+kube-controller-manager-kpaas-cp-master       1/1     Running   1 (11m ago)   12m
 kube-proxy-dj5c8                              1/1     Running   0             10m
 kube-proxy-kkvhk                              1/1     Running   0             10m
 kube-proxy-nfttc                              1/1     Running   0             10m
 kube-proxy-znfgk                              1/1     Running   0             10m
-kube-scheduler-paasta-cp-master               1/1     Running   1 (11m ago)   12m
+kube-scheduler-kpaas-cp-master                1/1     Running   1 (11m ago)   12m
 metrics-server-5cd75b7749-xcrps               2/2     Running   0             7m57s
-nginx-proxy-paasta-cp-worker-1                1/1     Running   0             10m
-nginx-proxy-paasta-cp-worker-2                1/1     Running   0             10m
-nginx-proxy-paasta-cp-worker-3                1/1     Running   0             10m
+nginx-proxy-kpaas-cp-worker-1                 1/1     Running   0             10m
+nginx-proxy-kpaas-cp-worker-2                 1/1     Running   0             10m
+nginx-proxy-kpaas-cp-worker-3                 1/1     Running   0             10m
 nodelocaldns-556gb                            1/1     Running   0             8m8s
 nodelocaldns-8dpnt                            1/1     Running   0             8m8s
 nodelocaldns-pvl6z                            1/1     Running   0             8m8s
@@ -533,7 +533,7 @@ $ source reset-cp-cluster.sh
 
 <br>
 
-# <div id='3'> 3. PaaS-TA Sidecar 설치
+# <div id='3'> 3. K-PaaS Sidecar 설치
 ## <div id='3.1'> 3.1. 실행파일 소개
 - Sidecar를 설치 & 활용하기 위해선 다음과 같은 실행파일이 필요하다.
 
@@ -569,7 +569,7 @@ $ source reset-cp-cluster.sh
 - git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v1.0.3 버전이다.
   ```
   $ cd $HOME
-  $ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b v1.0.3
+  $ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v1.0.3.1
   $ cd sidecar-deployment/install-scripts
   ```
 
@@ -593,7 +593,7 @@ $ source reset-cp-cluster.sh
   ...
 
   NAME                                         READY   STATUS    RESTARTS   AGE   IP               NODE                  NOMINATED NODE   READINESS GATES
-  pod/istio-operator-1-12-6-559bb4bc96-vf9nj   1/1     Running   0          2h    10.233.119.197   paasta-cp-worker-4    <none>           <none>
+  pod/istio-operator-1-12-6-559bb4bc96-vf9nj   1/1     Running   0          2h    10.233.119.197   kpaas-cp-worker-4     <none>           <none>
 
   NAME                            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)      AGE   SELECTOR
   service/istio-operator-1-12-6   ClusterIP   10.233.29.48   <none>        8383/TCP     2h    name=istio-operator
@@ -948,4 +948,4 @@ $ source delete-sidecar.sh
 <br>
 
   
-### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [PaaS-TA Sidecar Install](./README.md) > Sidecar
+### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > [K-PaaS Sidecar Install](./README.md) > Sidecar

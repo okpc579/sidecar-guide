@@ -1,4 +1,4 @@
-### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [PaaS-TA Sidecar Install](./README.md) > Logging Service
+### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > [K-PaaS Sidecar Install](./README.md) > Logging Service
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@
 
 # <div id='1'> 1. 문서 개요
 ## <div id='1.1'> 1.1. 목적
-본 문서는 PaaS-TA Sidecar(이하 Sidecar) 환경에서 Logging 서비스를 사용하기 위한 가이드를 제공하는 데 목적이 있다.
+본 문서는 K-PaaS Sidecar(이하 Sidecar) 환경에서 Logging 서비스를 사용하기 위한 가이드를 제공하는 데 목적이 있다.
 
 <br>
 
@@ -46,7 +46,7 @@ cf-k8s-logging github : [https://github.com/cloudfoundry/cf-k8s-logging](https:/
 
 <br>
 
-## <div id='2.2'> 2.2 Variable 설정  
+## <div id='2.2'> 2.2 Variable 설정
 POD의 형태로 배포되는 Infra와 Logging 서비스 변수를 설정한다.
 - Logging Variable  
 > $ vi $HOME/sidecar-deployment/install-scripts/logging/logging-service-variable.yml
@@ -70,7 +70,7 @@ LOGGING_NAMESPACE=logging                           # Logging Infra Namespace(Ku
 INFLUXDB_IP=influxdb.logging.svc.cluster.local      # InfluxDB IP
 INFLUXDB_HTTP_PORT="8086"                           # InfluxDB Port
 INFLUXDB_USERNAME=admin                             # InfluxDB Username
-INFLUXDB_PASSWORD=PaaS-TA2020                       # InfluxDB Password
+INFLUXDB_PASSWORD=K-PaaS2020                       # InfluxDB Password
 INFLUXDB_HTTPS_ENABLED=true                         # (e.g. true or false)
 INFLUXDB_DATABASE=logging_db                        # InfluxDB DB Name
 INFLUXDB_MEASUREMENT=logging_measurement            # InfluxDB Measurement Name
@@ -81,7 +81,7 @@ INFLUXDB_TIME_PRECISION=s                           # Level of timestamp stored 
 
 <br>
 
-## <div id='2.3'> 2.3. Infra 배포   
+## <div id='2.3'> 2.3. Infra 배포
 - Kubernetes 환경에 Sidecar Logging 에서 사용 될 Infra를 배포한다.
 ```shell script
 $ cd $HOME/sidecar-deployment/install-scripts/logging/infra
@@ -196,7 +196,7 @@ data:
 +        host influxdb.logging.svc.cluster.local
 +        port 8086
 +        user admin
-+        password PaaS-TA2020
++        password K-PaaS2020
 +        dbname logging_db
 +        measurement logging_measurement
 +        time_precision s
@@ -246,9 +246,9 @@ pod/uaa-6fc9cf8bcb-9mq7r                                  3/3     Running     0 
 
 <br>
 
-## <div id='2.5'> 2.5. Portal Log API 배포   
+## <div id='2.5'> 2.5. Portal Log API 배포
 - Manifest 파일을 수정한다.
-> $ vi $HOME/sidecar-deployment/install-scripts/portal/portal-app/portal-app-1.2.13/portal-log-api-2.3.2/manifest.yml
+> $ vi $HOME/sidecar-deployment/install-scripts/portal/portal-app/portal-app-1.2.14.1/portal-log-api-2.3.2.1/manifest.yml
 ```yaml
 applications:
 - name: portal-log-api
@@ -256,7 +256,7 @@ applications:
   instances: 1
   buildpacks:
   - java_buildpack
-  path: paas-ta-portal-log-api.jar
+  path: ap-portal-log-api.jar
   env:
 
     ...
@@ -265,7 +265,7 @@ applications:
     influxdb_ip: influxdb.logging.svc.cluster.local
     influxdb_url: https://influxdb.logging.svc.cluster.local:8086
     influxdb_username: admin
-    influxdb_password: PaaS-TA2020
+    influxdb_password: K-PaaS2020
     influxdb_database: logging_db
     influxdb_measurement: logging_measurement
     influxdb_limit: 50
@@ -274,11 +274,11 @@ applications:
 
 - Sidecar 환경에 Portal Log API를 배포한다.
 ```
-$ cd $HOME/sidecar-deployment/install-scripts/portal/portal-app/portal-app-1.2.13/portal-log-api-2.3.2
+$ cd $HOME/sidecar-deployment/install-scripts/portal/portal-app/portal-app-1.2.14.1/portal-log-api-2.3.2.1
 $ cf push -b paketo-buildpacks/java
 
 Pushing app portal-log-api to org portal / space system as admin...
-Applying manifest file /home/ubuntu/sidecar-deployment/install-scripts/portal/portal-app/portal-app-1.2.13/portal-log-api-2.3.2/manifest.yml...
+Applying manifest file /home/ubuntu/sidecar-deployment/install-scripts/portal/portal-app/portal-app-1.2.14.1/portal-log-api-2.3.2.1/manifest.yml...
 
 ...
 
@@ -328,9 +328,9 @@ There are no running instances of this process.
 
 # <div id='3'> 3. Logging 서비스 관리
 ## <div id='3.1'> 3.1. Logging 서비스 활성화
-PaaS-TA 포탈에서 서비스를 사용하기 위해 Logging 서비스 활성화 코드 등록을 해 주어야 한다.
+K-PaaS 포탈에서 서비스를 사용하기 위해 Logging 서비스 활성화 코드 등록을 해 주어야 한다.
 
--	PaaS-TA 운영자 포탈에 접속한다.  
+-	K-PaaS 운영자 포탈에 접속한다.  
 ![001]
 
 -	운영관리의 코드관리 메뉴로 이동하여 다음과 같이 코드를 등록한다.
@@ -357,4 +357,4 @@ PaaS-TA 포탈에서 서비스를 사용하기 위해 Logging 서비스 활성�
 <br>
 
 
-### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [PaaS-TA Sidecar Install](./README.md) > Logging Service
+### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > [K-PaaS Sidecar Install](./README.md) > Logging Service

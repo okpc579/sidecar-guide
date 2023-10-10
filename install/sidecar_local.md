@@ -1,4 +1,4 @@
-### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [PaaS-TA Sidecar Install](./README.md) > Sidecar - local
+### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > [K-PaaS Sidecar Install](./README.md) > Sidecar - local
 
 ## Table of Contents
 
@@ -7,7 +7,7 @@
   1.2. [범위](#1.2)  
   1.3. [참고자료](#1.3)  
 
-2. [PaaS-TA Sidecar - local 설치](#2)  
+2. [K-PaaS Sidecar - local 설치](#2)  
   2.1. [Prerequisite](#2.1)  
   2.2. [설치 파일 다운로드](#2.2)  
   2.3. [실행 파일 소개 및 설치](#2.3)  
@@ -20,7 +20,7 @@
 
 # <div id='1'> 1. 문서 개요
 ## <div id='1.1'> 1.1. 목적
-본 문서는 Local Kubenetes Cluster를 구성하고 해당 환경에서 PaaS-TA Sidecar(이하 Sidecar)를 설치하기 위한 가이드를 제공하는 데 목적이 있다.
+본 문서는 Local Kubenetes Cluster를 구성하고 해당 환경에서 K-PaaS Sidecar(이하 Sidecar)를 설치하기 위한 가이드를 제공하는 데 목적이 있다.
 
 <br>
 
@@ -38,7 +38,7 @@ minikube Document : [https://minikube.sigs.k8s.io/docs/](https://minikube.sigs.k
 
 <br>
 
-# <div id='2'> 2. PaaS-TA Sidecar - local 설치
+# <div id='2'> 2. K-PaaS Sidecar - local 설치
 ## <div id='2.1'> 2.1. Prerequisite
 cf-for-k8s 공식 문서에서는 Local Kubernetes Cluster 요구 조건을 다음과 같이 권고하고 있다.
 - 최소 4 CPU, 6GB Memory
@@ -50,10 +50,10 @@ cf-for-k8s 공식 문서에서는 Local Kubernetes Cluster 요구 조건을 다�
 
 ## <div id='2.2'> 2.2. 설치 파일 다운로드
 
-- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v1.0.2 버전이다.
+- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v1.0.3.1 버전이다.
 ```
 $ cd $HOME
-$ git clone https://github.com/PaaS-TA/sidecar-deployment.git -b v1.0.2
+$ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v1.0.3.1
 $ cd sidecar-deployment
 ```
 
@@ -242,6 +242,23 @@ $ kapp deploy -a sidecar -f tmp/sidecar-rendered.yml -y
 1:56:23AM: ---- waiting complete [305/305 done] ----
 
 Succeeded
+```
+
+- /etc/hosts에 사용할 도메인을 추가한다.
+```diff
+$ sudo vi /etc/hosts
+
+
++127.0.0.1 localhost api.vcap.me login.vcap.me uaa.vcap.me log-cache.vcap.me test-node-app.apps.vcap.me
+  
+# The following lines are desirable for IPv6 capable hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
 ```
 
 - Sidecar가 정상설치 되었는지 샘플앱을 통해 확인한다.
@@ -460,4 +477,4 @@ $ minikube delete
 
 <br>
 
-### [Index](https://github.com/PaaS-TA/Guide/blob/master/README.md) > [PaaS-TA Sidecar Install](./README.md) > Sidecar - local
+### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > [K-PaaS Sidecar Install](./README.md) > Sidecar - local

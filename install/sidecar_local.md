@@ -40,7 +40,7 @@ kind Document : [https://kind.sigs.k8s.io/](https://kind.sigs.k8s.io/)
 
 ## <div id='2.2'> 2.2. 설치 파일 다운로드
 
-- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v1.0.3.1 버전이다.
+- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v2.0.0-beta 버전이다.
 ```
 $ cd $HOME
 $ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v2.0.0-beta
@@ -73,6 +73,20 @@ $ source utils-install.sh
 - cluster 생성
 ```
 $ ./deploy-kind.sh
+
+Creating cluster "sidecar" ...
+ ✓ Ensuring node image (kindest/node:v1.26.3) 🖼 
+ ✓ Preparing nodes 📦  
+ ✓ Writing configuration 📜 
+ ✓ Starting control-plane 
+ ✓ Installing CNI 🔌 
+ ✓ Installing StorageClass 💾 
+Set kubectl context to "kind-sidecar"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-sidecar
+
+Not sure what to do next? 😅  Check out https://kind.sigs.k8s.io/docs/user/quick-start/
 ```
 
 <br>

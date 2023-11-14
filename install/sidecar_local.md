@@ -11,12 +11,8 @@
   2.1. [Prerequisite](#2.1)  
   2.2. [설치 파일 다운로드](#2.2)  
   2.3. [실행 파일 소개 및 설치](#2.3)  
-  2.4. [Local Kubernetes Cluster 구성](#2.4)  
-  　2.4.1 [kind](#2.4.1)  
-  　2.4.2 [minikube](#2.4.2)  
+  2.4. [Local Kubernetes Cluster 구성](#2.4)   
   2.5. [Sidecar 설치](#2.5)  
-  　2.5.1 [kind](#2.5.1)  
-  　2.5.2 [minikube](#2.5.2)  
 
 # <div id='1'> 1. 문서 개요
 ## <div id='1.1'> 1.1. 목적
@@ -73,7 +69,6 @@ $ source utils-install.sh
 
 ## <div id='2.4'> 2.4. Local Kubernetes Cluster 구성
 본 가이드에서 제공되는 cluster 구성 도구 kind로 진행한다.  
-### <div id='2.4.1'> 2.4.1. kind
 
 - cluster 생성
 ```
@@ -83,7 +78,6 @@ $ ./deploy-kind.sh
 <br>
 
 ## <div id='2.5'> 2.5. Sidecar 설치
-### <div id='2.5.1'> 2.5.1. kind
 
 - Sidecar 배포 스크립트를 실행한다.
 ```

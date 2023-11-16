@@ -434,11 +434,11 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 
 <br>
   
-### <div id='2.8.2'> ※ (참고) Sidecar 삭제
+### <div id='2.8.1'> ※ (참고) Sidecar 삭제
 ```
 $ source delete-sidecar.sh
 ```
-### <div id='2.8.3'> ※ (참고) Sidecar Dependency 삭제 (Sidecar 삭제 후)
+### <div id='2.8.2'> ※ (참고) Sidecar Dependency 삭제 (Sidecar 삭제 후)
 ```
 $ source delete-dependency.sh
 ```

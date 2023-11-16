@@ -185,7 +185,8 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 - Sidecar를 실행 시 필요한 패키지를 설치한다.
   ```
   $ source 2.deploy-dependency.sh
-
+  ```
+  ```
   ............
 
   ====================cert-manager====================
@@ -279,7 +280,8 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 - Sidecar를 설치한다.
   ```
   $ source 3.deploy-sidecar.sh
-
+  ```
+  ```
   Release "sidecar" has been upgraded. Happy Helming!
   NAME: sidecar
   LAST DEPLOYED: Wed Nov 15 04:57:12 2023
@@ -320,8 +322,8 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 ## <div id='2.8'> 2.8. Sidecar 로그인 및 테스트 앱 배포
 - 테스트 앱을 배포하여 앱이 정상 배포되는지 확인한다.
 - Sidecar v2.0.0-beta 이상부터는 로그인하는 유저는 Kubernetes의 User로 로그인을 진행한다.
+- 배포 자동 테스트
   ```
-  # 배포 자동 테스트
   $ ./install-test.sh
   .......
   Waiting for app test-node-app to start...
@@ -353,13 +355,11 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
   Deleting org temp-test-org as sidecar-admin...
   OK
 
-
-
-
-  # 배포 수동 테스트
+  ```
+- 배포 수동 테스트
+  ```
   $ KUBECONFIG=/home/ubuntu/sidecar-deployment/install-scripts/support-files/user/sidecar-$(grep admin_username ./variables.yml | cut -d "=" -f 2 | cut -d " " -f1).ua.kubeconfig 
   $ cf login -a api.$(grep system_domain ./variables.yml | cut -d"=" -f2 | cut -d" " -f1) --skip-ssl-validation -u $(grep admin_username ./variables.yml | cut -d "=" -f 2 | cut -d " " -f1)
-
   API endpoint: api.system.domain
 
   Authenticating...
@@ -369,13 +369,15 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
   API version:    3.117.0+cf-k8s
   user:           sidecar-admin
   No org or space targeted, use 'cf target -o ORG -s SPACE'
-
+  ```
+  ```
   $ cf create-org temp-test-org
   Creating org temp-test-org as sidecar-admin...
   OK
 
   TIP: Use 'cf target -o "temp-test-org"' to target new org
-
+  ```
+  ```
   $ cf create-space temp-test-space -o temp-test-org
   Creating space temp-test-space in org temp-test-org as sidecar-admin...
   OK
@@ -387,15 +389,16 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
   OK
 
   TIP: Use 'cf target -o "temp-test-org" -s "temp-test-space"' to target new space
-
+  ```
+  ```
   $ cf target -o temp-test-org -s temp-test-space
   API endpoint:   https://api.system.domain
   API version:    3.117.0+cf-k8s
   user:           sidecar-admin
   org:            temp-test-org
   space:          temp-test-space
-
-
+  ```
+  ```
   $ cf push -p ./support-files/sample-app/ temp-test-app
   Pushing app temp-test-app to org temp-test-org / space temp-test-space as sidecar-admin...
   Packaging files to upload...
@@ -426,10 +429,10 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
   start command:   node "server.js"
        state     since                  cpu    memory   disk     logging      details
   #0   running   2023-11-15T05:05:14Z   0.0%   0 of 0   0 of 0   0/s of 0/s   
-
+  ```
+  ```
   $ curl -k https://temp-test-app.apps.system.domain
-  Hello World
-
+  Hello World  
   ```
 
 <br>

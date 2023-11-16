@@ -40,7 +40,7 @@
 
 
 ## <div id='1.3'> 1.3. 참고자료
-K-PaaS 컨테이너 플랫폼 : [https://github.com/K-PaaS/container-platform](https://github.com/k-paas/cp-deployment)  
+K-PaaS 컨테이너 플랫폼 : [https://github.com/K-PaaS/container-platform]([https://github.com/k-paas/cp-deployment](https://github.com/K-PaaS/container-platform))  
 Kubespray : [https://kubespray.io](https://kubespray.io)  
 Kubespray github : [https://github.com/kubernetes-sigs/kubespray](https://github.com/kubernetes-sigs/kubespray)  
 korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/cloudfoundry/korifi)  
@@ -122,7 +122,7 @@ root_namespace=kpaas                                         # sidecar resource 
 
 ## dependency variable
 use_lb=true                                                  # (e.g. true or false)
-lb_ip=                                                       # if k8s support loadBalancerIP ==> ip input (e.g. 23.45.23.45), k8s not support loadBalancerIP ==> blank
+lb_ip=                                                       # if support loadBalancerIP ==> ip input (e.g. 23.45.23.45), not support loadBalancerIP ==> blank
 
 ## sidecar core variable
 system_domain=sidecar.com                                    # sidecar system_domain (e.g. 3.35.135.135.nip.io)
@@ -152,7 +152,7 @@ cert_secret_name=harbor-cert                                 # ca cert secret na
 | sidecar_namespace | Sidecar 설치 namespace |
 | root_namespace | Sidecar Resource namespace |
 | use_lb | true 시 LoadBalancer, false 시 NodePort 배포 |
-| lb_ip | LoadBalancerIP가 지원되는 K8S일 시 입력, 미 지원 시 공백 |
+| lb_ip | LoadBalancerIP가 지원되는 환경일 시 입력, 미 지원 시 공백 |
 | system_domain | Sidecar 시스템 도메인 |
 | admin_username | Sidecar 관리자 이름 |
 | user_certificate_expiration_duration_days | 유저를 생성할 시 인증서 기간 |
@@ -297,7 +297,6 @@ Context "sidecar-admin" modified.
 Switched to context "sidecar-admin".
 kubeconfig file : /home/ubuntu/sidecar-deployment/install-scripts/support-files/user/sidecar-sidecar-admin.ua.kubeconfig
 
-Use "cf set-space-role sidecar-admin ORG SPACE SpaceDeveloper" to grant this user permissions in a space.
 NAME                                                         READY   STATUS    RESTARTS   AGE
 pod/korifi-api-deployment-84555d64d5-9x5n2                   1/1     Running   0          2m36s
 pod/korifi-controllers-controller-manager-69996595fb-w42qs   1/1     Running   0          2m36s
@@ -453,7 +452,7 @@ $ source delete-dependency.sh
 <br>
 
 ## <div id='2.9'> 2.9. Sidecar User 생성
-- 운영자가 kubeconfig를 생성하여 권한을 설정 한 후, 유저에게 해당 kubeconfig을 전달한다.
+- 운영자가 kubeconfig 파일를 생성하여 권한을 설정 한 후, 유저에게 해당 kubeconfig 파일을 전달한다.
 ### <div id='2.9.1'> 2.9.1. Sidecar User Account 생성
 ```
 # kubernets admin 권한으로 진행

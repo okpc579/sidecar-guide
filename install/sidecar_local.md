@@ -21,7 +21,7 @@
 <br>
 
 ## <div id='1.2'> 1.2. 범위
-본 문서는 [sidecar-deployment v2.0.0-beta](https://github.com/K-PaaS/sidecar-deployment/tree/v2.0.0-beta)를 기준으로 작성하였다.  
+본 문서는 [korifi v0.10.0](https://github.com/cloudfoundry/korifi/tree/v0.10.0), [sidecar-deployment v2.0.0-beta](https://github.com/K-PaaS/sidecar-deployment/tree/v2.0.0-beta)를 기준으로 작성하였다.  
 본 문서는 [kind](https://kind.sigs.k8s.io/)로 Local Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.
 
 <br>

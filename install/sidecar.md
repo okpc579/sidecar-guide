@@ -144,7 +144,6 @@ is_self_signed_certificate=false                             # is private regist
 registry_cert_path=support-files/private-repository.ca       # if is_self_signed_certificate==true --> add the contents of the private-repository.ca file
                                                              # if is_self_signed_certificate==false --> private-repository.ca is empty
 cert_secret_name=harbor-cert                                 # ca cert secret name (k8s secret resource)
-
 ```
 - 주요 변수의 설명은 다음과 같다.
 
@@ -271,8 +270,6 @@ deployment.apps/servicebinding-controller-manager   1/1     1            1      
 
 NAME                                                          DESIRED   CURRENT   READY   AGE
 replicaset.apps/servicebinding-controller-manager-dff969cdc   1         1         1       21h
-
-
 ```
 <br>
 
@@ -357,7 +354,6 @@ OK
 
 Deleting org temp-test-org as sidecar-admin...
 OK
-
 ```
   
 - 배포 수동 테스트

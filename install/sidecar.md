@@ -93,15 +93,14 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 ## <div id='2.3'> 2.3. 실행파일 다운로드
 
 - git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v2.0.0-beta 버전이다.
+
   ```
   $ cd $HOME
   $ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v2.0.0-beta
   $ cd sidecar-deployment/install-scripts
   ```
 
-<br>
-
-- utils-install.sh 파일을 실행하여 Sidecar 설치 시 필요한 실행 파일을 설치한다.
+- utils-install.sh 파일을 실행하여 Sidecar 설치 시 필요한 실행 파일을 설치한다.  
   ```
   $ source utils-install.sh
   ```
@@ -171,22 +170,21 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 
 ## <div id='2.5'> 2.5. 네임스페이스 생성 & 레지스트리 정보 입력
 - 다음 스크립트를 실행하여 Sidecar에서 사용하는 네임스페이스와 레지스트리 정보를 입력한다.
+
   ```
   $ source 1.init.sh
 
   namespace/sidecar created
   namespace/kpaas created
   secret/image-registry-credentials created
-
   ```
-<br>
 
 ## <div id='2.6'> 2.6. Sidecar Dependency 배포
 - Sidecar를 실행 시 필요한 패키지를 설치한다.
+
   ```
   $ source 2.deploy-dependency.sh
-  ```
-  ```
+
   ............
 
   ====================cert-manager====================
@@ -278,10 +276,10 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 
 ## <div id='2.7'> 2.7. Sidecar 설치
 - Sidecar를 설치한다.
+
   ```
   $ source 3.deploy-sidecar.sh
-  ```
-  ```
+  
   Release "sidecar" has been upgraded. Happy Helming!
   NAME: sidecar
   LAST DEPLOYED: Wed Nov 15 04:57:12 2023
@@ -325,7 +323,8 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 - 배포 자동 테스트
   ```
   $ ./install-test.sh
-  .......
+
+  ............
   Waiting for app test-node-app to start...
 
   Instances starting...

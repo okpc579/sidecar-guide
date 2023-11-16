@@ -179,6 +179,7 @@ namespace/kpaas created
 secret/image-registry-credentials created
 ```
 
+
 ## <div id='2.6'> 2.6. Sidecar Dependency 배포
 - Sidecar를 실행 시 필요한 패키지를 설치한다.
 
@@ -317,6 +318,7 @@ replicaset.apps/korifi-controllers-controller-manager-69996595fb   1         1  
 ```
 
 
+
 ## <div id='2.8'> 2.8. Sidecar 로그인 및 테스트 앱 배포
 - 테스트 앱을 배포하여 앱이 정상 배포되는지 확인한다.
 - Sidecar v2.0.0-beta 이상부터는 로그인하는 유저는 Kubernetes의 User로 로그인을 진행한다.
@@ -450,6 +452,7 @@ $ source delete-sidecar.sh
 ```
 $ source delete-dependency.sh
 ```
+
 
 
 ## <div id='2.9'> 2.9. Sidecar User 생성

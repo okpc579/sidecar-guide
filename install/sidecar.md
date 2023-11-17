@@ -21,6 +21,7 @@
   2.9. [Sidecar User 생성](#2.9)  
   　2.9.1. [Sidecar User Account 생성](#2.9.1)  
   　2.9.2. [Sidecar Service Account 생성](#2.9.2)  
+  　　※ [(참고) Container Platform Portal 계정을 사용하여 Sidecar 접속](#2.9.2.1)  
   　2.9.3. [Sidecar Admin 권한 부여](#2.9.3)  
 
 <br><br>
@@ -473,8 +474,19 @@ $ ./create-new-sa.sh <생성할 username>
 # create-new-sa.sh 실행 시 해당 디렉토리에 kubeconfig 파일을 생성함
 ```
 ```
-# create-new-sa.sh를 통해 Service Account를 생성할 경우, Service Account namespace는 Sidecar를 배포할 시의 root_namespace 변수값과 동일하다.
-$ ./binding-sa.sh <Service Account namespace><생성한 username> <권한을 줄 ORG이름> <권한을 줄 SPACE이름>
+# create-new-sa.sh를 통해 Service Account를 생성할 경우,
+# Service Account namespace는 Sidecar를 배포할 시의 root_namespace 변수값과 동일하다.
+$ ./binding-sa.sh <Service Account namespace> <생성한 username> <권한을 줄 ORG이름> <권한을 줄 SPACE이름>
+```
+
+#### <div id='2.9.2.1'> ※ (참고) Container Platform Portal 계정을 사용하여 Sidecar 접속
+- Container Platform Portal 유저가 사용할 Namespace와 User ID를 운영자에게 전달하여, 운영자가 권한을 부여하여 Sidecar 접속이 가능하다.
+- 운영자는 User의 Service Account 정보를 확인하여 다음과 같이 진행한다.
+- ※ Service Account 확인방법 (Container Platform Portal > Dashboard > Managements > Users > > User > 해당 ID 클릭 > Services Account	확인)
+```
+# kubernets admin 권한으로 진행
+$ cd ~/sidecar-deployment/install-scripts/support-files/user
+$ ./binding-sa.sh <Service Account namespace> <확인 한 Service Account> <권한을 줄 ORG이름> <권한을 줄 SPACE이름>
 ```
 ### <div id='2.9.3'> 2.9.3. Sidecar Admin 권한 부여
 ```
@@ -482,5 +494,5 @@ $ ./binding-sa.sh <Service Account namespace><생성한 username> <권한을 줄
 $ cd ~/sidecar-deployment/install-scripts/support-files/user
 $ ./binding-admin.sh <user 종류 (ua, sa)> <username>
 ```
-  
+
 ### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > [K-PaaS Sidecar Install](./README.md) > Sidecar

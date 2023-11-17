@@ -473,7 +473,8 @@ $ ./create-new-sa.sh <생성할 username>
 # create-new-sa.sh 실행 시 해당 디렉토리에 kubeconfig 파일을 생성함
 ```
 ```
-$ ./binding-sa.sh <생성한 username> <권한을 줄 ORG이름> <권한을 줄 SPACE이름>
+# create-new-sa.sh를 통해 Service Account를 생성할 경우, Service Account namespace는 Sidecar를 배포할 시의 root_namespace 변수값과 동일하다.
+$ ./binding-sa.sh <Service Account namespace><생성한 username> <권한을 줄 ORG이름> <권한을 줄 SPACE이름>
 ```
 ### <div id='2.9.3'> 2.9.3. Sidecar Admin 권한 부여
 ```

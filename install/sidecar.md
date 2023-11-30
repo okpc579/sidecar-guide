@@ -359,7 +359,7 @@ OK
 - 배포 수동 테스트
 
 ```
-$ KUBECONFIG=/home/ubuntu/sidecar-deployment/install-scripts/support-files/user/sidecar-$(grep admin_username ./variables.yml | cut -d "=" -f 2 | cut -d " " -f1).ua.kubeconfig 
+$ export KUBECONFIG=/home/ubuntu/sidecar-deployment/install-scripts/support-files/user/sidecar-$(grep admin_username ./variables.yml | cut -d "=" -f 2 | cut -d " " -f1).ua.kubeconfig 
 $ cf login -a api.$(grep system_domain ./variables.yml | cut -d"=" -f2 | cut -d" " -f1) --skip-ssl-validation -u $(grep admin_username ./variables.yml | cut -d "=" -f 2 | cut -d " " -f1)
   
 API endpoint: api.system.domain

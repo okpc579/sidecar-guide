@@ -41,7 +41,7 @@
 
 
 ## <div id='1.3'> 1.3. 참고자료
-K-PaaS 컨테이너 플랫폼 : [https://github.com/K-PaaS/container-platform]([https://github.com/k-paas/cp-deployment](https://github.com/K-PaaS/container-platform)  
+K-PaaS 컨테이너 플랫폼 : [https://github.com/K-PaaS/container-platform](https://github.com/K-PaaS/container-platform)  
 Kubespray : [https://kubespray.io](https://kubespray.io)  
 Kubespray github : [https://github.com/kubernetes-sigs/kubespray](https://github.com/kubernetes-sigs/kubespray)  
 korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/cloudfoundry/korifi)  

@@ -5,10 +5,4 @@
   - [Sidecar](./sidecar.md)
   - [Sidecar - local](./sidecar_local.md)
 
-+ Portal
-  + [Portal infra & Portal APP](./sidecar_portal.md)
-
-- Service
-  - [Logging](./sidecar_logging.md)
-
 ### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > K-PaaS Sidecar Install

@@ -7,47 +7,34 @@
   1.2. [범위](#1.2)  
   1.3. [참고자료](#1.3)  
 
-2. [Kubespray 사용 Kubernetes Cluster 구성](#2)  
+2. [K-PaaS Sidecar 설치](#2)  
   2.1. [Prerequisite](#2.1)  
-  2.2. [AWS 설정 (AWS 환경 사용 시)](#2.2)  
-  　※ [(참고) AWS IAM 설정](#2.2.1)  
-  2.3. [NFS 설정 (NFS 배포 시)](#2.3)  
-  　2.3.1 [Linux Kernel 버전 업그레이드](#2.3.1)  
-  　2.3.2 [NFS 설치](#2.3.2)  
-  　　2.3.2.1 [Server](#2.3.2.1)  
-  　　2.3.2.2 [Client](#2.3.2.2)  
-  　　2.3.2.3 [테스트](#2.3.2.3)  
-  2.4. [SSH Key 생성 및 배포](#2.4)  
-  2.5. [Kubespray 다운로드](#2.5)  
-  2.6. [Kubespray 설치 준비](#2.6)  
-  2.7. [Sidecar 설치용 Kubespray 설정 변경](#2.7)  
-  2.8. [Kubespray 설치](#2.8)  
-  2.9. [Kubespray 설치 확인](#2.9)  
-  　※ [(참고) Kubespray 삭제](#2.9.1)  
-
-3. [K-PaaS Sidecar 설치](#3)  
-  3.1. [실행파일 소개](#3.1)  
-  3.2. [실행파일 다운로드](#3.2)  
-  3.3. [Istio CNI Plugin 활성화](#3.3)  
-  3.4. [variable 설정](#3.4)  
-  3.5. [Sidecar values 생성](#3.5)  
-  3.6. [Sidecar 배포 YAML 생성](#3.6)  
-  3.7. [Sidecar 설치](#3.7)  
-  　※ [AWS 기반 Sidecar 설치 시 LoadBalancer 도메인 연결](#3.7.1)  
-  3.8. [Sidecar 로그인 및 테스트 앱 배포](#3.8)  
-  　※ [(참고) Sidecar 삭제](#3.8.1)  
+  2.2. [실행파일 소개](#2.2)  
+  2.3. [실행파일 다운로드](#2.3)  
+  2.4. [variable 설정](#2.4)  
+  2.5. [네임스페이스 생성 & 레지스트리 정보 입력](#2.5)  
+  2.6. [Sidecar Dependency 배포](#2.6)  
+  2.7. [Sidecar 설치](#2.7)  
+  2.8. [Sidecar 로그인 및 테스트 앱 배포](#2.8)  
+  　※ [(참고) Sidecar 삭제](#2.8.1)  
+  　※ [(참고) Sidecar Dependency 삭제 (Sidecar 삭제 후)](#2.8.2)  
+  2.9. [Sidecar User 생성](#2.9)  
+  　2.9.1. [Sidecar User Account 생성](#2.9.1)  
+  　2.9.2. [Sidecar Service Account 생성](#2.9.2)  
+  　　※ [(참고) Container Platform Portal 계정을 사용하여 Sidecar 접속](#2.9.2.1)  
+  　2.9.3. [Sidecar Admin 권한 부여](#2.9.3)  
 
 <br><br>
 
 # <div id='1'> 1. 문서 개요
 ## <div id='1.1'> 1.1. 목적
-본 문서는 K-PaaS Container-Platform 단독 배포 시 사용되는 Kubespray로 Kubenetes Cluster를 구성하고 해당 환경에서 K-PaaS Sidecar(이하 Sidecar)를 설치하기 위한 가이드를 제공하는 데 목적이 있다.
+본 문서는 K-PaaS Container-Platform 단독 배포 환경에서 K-PaaS Sidecar(이하 Sidecar)를 설치하기 위한 가이드를 제공하는 데 목적이 있다.
 
 <br>
 
 ## <div id='1.2'> 1.2. 범위
-본 문서는 [cf-for-k8s v5.4.2](https://github.com/cloudfoundry/cf-for-k8s/tree/v5.4.2), [container-platform v1.4.0.1](https://github.com/K-PaaS/container-platform/blob/master/install-guide/standalone/cp-cluster-install.md)을 기준으로 작성하였다.    
-본 문서는 Openstack 환경에 K-PaaS Container-Platform 단독 배포(Kubespray)를 활용하여 Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.  
+본 문서는 [korifi v0.10.0](https://github.com/cloudfoundry/korifi/tree/v0.10.0), [sidecar-deployment v2.0.0-beta](https://github.com/K-PaaS/sidecar-deployment/tree/v2.0.0-beta), [cp-deployment v1.5.0](https://github.com/k-paas/cp-deployment/tree/v1.5.0)을 기준으로 작성하였다.    
+본 문서는 K-PaaS Container-Platform 단독 배포(Kubespray)를 활용하여 Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.  
 본 문서는 IaaS, Kubernetes에 대한 기본 이해도가 있다는 전제하에 가이드를 진행하였다.  
 
 <br>
@@ -57,895 +44,455 @@
 K-PaaS 컨테이너 플랫폼 : [https://github.com/K-PaaS/container-platform](https://github.com/K-PaaS/container-platform)  
 Kubespray : [https://kubespray.io](https://kubespray.io)  
 Kubespray github : [https://github.com/kubernetes-sigs/kubespray](https://github.com/kubernetes-sigs/kubespray)  
-cf-for-k8s github : [https://github.com/cloudfoundry/cf-for-k8s](https://github.com/cloudfoundry/cf-for-k8s)  
-cf-for-k8s Document : [https://cf-for-k8s.io/docs/](https://cf-for-k8s.io/docs/)  
+korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/cloudfoundry/korifi)  
 
 <br>
 
-# <div id='2'> 2. Kubespray 사용 Kubernetes Cluster 구성
-기본적인 Kubernetes Cluster 구성방법은 K-PaaS Container Platform 단독 배포 설치 가이드를 따라가되 일부 옵션이나 IaaS상에서 수정할 부분이 존재한다.
-본 가이드의 Kubernetes Cluster 구성은 위 링크된 단독 배포 설치 가이드를 간략하게 수정하였기 때문에 Kubernetes Cluster 구성에 대한 상세 설명은 링크된 단독 배포 설치 가이드를 참고한다.
-
-<br>
+# <div id='2'> 2. K-PaaS Sidecar 설치
 
 ## <div id='2.1'> 2.1. Prerequisite
-Kubernetes Cluster 구성을 위한 주요 소프트웨어 및 패키지 Version 정보는 K-PaaS Container Platform 단독 배포 설치 가이드에서 확인 가능하다.  
-추가로 cf-for-k8s 공식 문서에서는 Kubernetes Cluster 요구 조건을 다음과 같이 권고하고 있다.
-- Kubernetes version : 1.19 ~ 1.22
-- 최소 5 노드
-- 노드 당 최소 4 CPU, 15GB Memory
-- Network Policies를 지원하는 CNI Plugin 보유
-- LoadBalancer Service 지원
 - Default StorageClass 지정
-- OCI 호환 레지스트리 제공 (e.g. [Docker Hub](https://hub.docker.com/), [Google container registry](https://cloud.google.com/container-registry),  [Azure container registry](https://hub.docker.com/), [Harbor](https://goharbor.io/), etc....)  
-  본 가이드는 Docker Hub 기준으로 가이드가 진행된다. (계정가입 필요)
+- OCI 호환 이미지 레지스트리 제공 (e.g. [Docker Hub](https://hub.docker.com/), [Google container registry](https://cloud.google.com/container-registry),  [Azure container registry](https://hub.docker.com/), [Harbor](https://goharbor.io/), etc....)  
 
 <br>
 
-## <div id='2.2'> 2.2. AWS 설정 (AWS 환경 사용 시)
-AWS에 Sidecar용도의 Kubernetes Cluster를 구성 할 경우 LoadBalancer나 Storage의 사용을 위하여 Cluster를 구성하는 인스턴스에 IAM 권한이 필요하다.
-- IAM 역할을 생성하고 다음 정책을 추가한 뒤, 인스턴스 생성 시 적용한다. (IAM 설정에 관한 보충설명을 확인할 경우 하단의 AWS IAM 설정을 참고한다.)
-  ```
-  # iam_policy.json
 
-  {
-      "Version": "2012-10-17",
-      "Statement": [
-          {
-              "Effect": "Allow",
-              "Action": [
-                  "ec2:*"
-              ],
-              "Resource": [
-                  "*"
-              ]
-          },
-          {
-              "Effect": "Allow",
-              "Action": [
-                  "elasticloadbalancing:*"
-              ],
-              "Resource": [
-                  "*"
-              ]
-          },
-          {
-              "Effect": "Allow",
-              "Action": [
-                  "route53:*"
-              ],
-              "Resource": [
-                  "*"
-              ]
-          },
-          {
-              "Effect": "Allow",
-              "Action": "s3:*",
-              "Resource": [
-                  "arn:aws:s3:::kubernetes-*"
-              ]
-          },
-          {
-              "Effect": "Allow",
-              "Action": [
-                  "ecr:GetAuthorizationToken",
-                  "ecr:BatchCheckLayerAvailability",
-                  "ecr:GetDownloadUrlForLayer",
-                  "ecr:GetRepositoryPolicy",
-                  "ecr:DescribeRepositories",
-                  "ecr:ListImages",
-                  "ecr:BatchGetImage"
-              ],
-              "Resource": "*"
-          }
-      ]
-  }
-  ```
-
-- 클러스터를 구성할 **인스턴스**와 사용되는 **서브넷**의 태그에 다음과 같은 태그를 추가한다.
-  ```
-  key = kubernetes.io/cluster/{cluster_name}
-  value = member
-  ```
-  ![99](./images/sidecar/tags.png)
-
-<br>
-
-### <div id='2.2.1'> ※ (참고) AWS IAM 설정
-AWS IAM 설정 방법을 기술하였다.  
-
-- AWS IAM 메뉴 - 역할 메뉴에서 역할 만들기을 선택한다.  
-  ![IAM_01](./images/sidecar/IAM_01.PNG)
-  
-- 역할 만들기를 진행하여 정책 생성을 선택한다.  
-  ![IAM_02](./images/sidecar/IAM_02.PNG)
-  
-- JSON을 선택하여 상단의 iam_policy.json를 붙여넣고 진행한다.  
-  ![IAM_03](./images/sidecar/IAM_03.PNG)
-  
-- 정책을 생성 후 역할 만들기로 돌아가 생성한 정책을 선택한다.  
-  ![IAM_04](./images/sidecar/IAM_04.PNG)
-  
-- 이름을 정하고 역할 만들기를 완료한다.  
-  ![IAM_05](./images/sidecar/IAM_05.PNG)
-  
-- EC2 인스턴스를 구성시 IAM 역할에 만들었던 역할을 선택한다.  
-  ![IAM_06](./images/sidecar/IAM_06.PNG)
-  
-- 만약 인스턴스를 구성 완료했는데 IAM을 설정 안했다면, 인스턴스 - 작업 - 보안 - IAM 역할 수정을 선택하여 만들었던 역할을 선택후 인스턴스를 재 부팅한다.  
-  ![IAM_07](./images/sidecar/IAM_07.png)
-  
-<br>
-
-## <div id='2.3'> 2.3. NFS 설정 (NFS 배포 시)
-본 설치 가이드는 NFS Server는 **Ubuntu 18.04**, NFS Client는 **Ubuntu 20.04** 환경에서 설치하는 것을 기준으로 하였다. NFS Server의 경우 Kubespray로 배포된 Cluster에서 사용할 Storage용이기에 Storage용 별도 VM에 설치한다.
-
-### <div id='2.3.1'> 2.3.1 Linux Kernel 버전 업그레이드
-Linux Kernel 버전 **v5.9**부터 NFS에서 xattr이 지원되므로, 버전이 v5.8 이하인 경우 다음 작업을 수행해야 한다. Kubernetes Cluster가 설치되는 모든 Node와 NFS Server로 사용할 VM에서 진행한다.
-
-- Linux Kernel 버전을 확인한다.
-  ```
-  $ uname -a
-  Linux kpaas-cp-master 4.15.0-206-generic #217-Ubuntu SMP Fri Feb 3 19:10:13 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
-  ```
-
-- 다음 경로에서 Linux Kernel 버전을 업그레이드 하는 데 필요한 *.deb 파일 다운로드를 진행한다. 본 설치 가이드에서의 Linux Kernel 버전은 **v5.9**이다.
-  ```shell
-  $ cd $HOME
-  $ mkdir linux-kernel-5.9
-  $ cd linux-kernel-5.9
-  
-  $ wget https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.9/amd64/linux-headers-5.9.0-050900-generic_5.9.0-050900.202010112230_amd64.deb \
-  https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.9/amd64/linux-headers-5.9.0-050900_5.9.0-050900.202010112230_all.deb \
-  https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.9/amd64/linux-image-unsigned-5.9.0-050900-generic_5.9.0-050900.202010112230_amd64.deb \
-  https://kernel.ubuntu.com/~kernel-ppa/mainline/v5.9/amd64/linux-modules-5.9.0-050900-generic_5.9.0-050900.202010112230_amd64.deb
-  ```
-
-- 다음 명령어를 실행하여 Linux Kernel 버전을 업그레이드 한다.
-  ```
-  $ sudo su
-  # dpkg -i *.deb
-  # reboot
-  ```
-
-- reboot 후 다시 접속하여 Linux Kernel 버전을 확인한다.
-  ```
-  $ uname -a
-  Linux kpaas-cp-master 5.9.0-050900-generic #202010112230 SMP Sun Oct 11 22:34:01 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
-  ```
-
-### <div id='2.3.2'> 2.3.2 NFS 설치
-#### <div id='2.3.2.1'> 2.3.2.1 Server
-- 패키지 업데이트 및 업그레이드를 진행한다.
-  ```
-  $ sudo apt -y update && sudo apt -y upgrade
-  ```
-- 패키지를 설치한다.
-  ```
-  $ sudo apt install -y nfs-common nfs-kernel-server rpcbind attr
-  ```
-- 사용 가능한 NFS 버전을 확인한다. xattr을 활성화하기 위해서는 버전 **v4.2** 이상이 필요하다.
-  ```
-  $ sudo cat /proc/fs/nfsd/versions
-  # -2 +3 +4 +4.1 +4.2
-  ```
-- NFS에서 사용될 디렉토리를 생성하고 권한을 부여한다.
-  ```shell
-  $ sudo mkdir -p /home/share/nfs
-  $ sudo chmod 777 /home/share/nfs
-  ```
-- 공유 디렉토리를 설정한다.
-  ```shell
-  $ sudo vi /etc/exports
-  
-  ## 형식 : [dir] [IP] [option]
-  ## 예시 : /home/share/nfs 10.0.0.1(rw,no_subtree_check,no_root_squash,async)
-  /home/share/nfs {{MASTER_NODE_PRIVATE_IP}}(rw,no_subtree_check,no_root_squash,async)
-  /home/share/nfs {{WORKER1_NODE_PRIVATE_IP}}(rw,no_subtree_check,no_root_squash,async)
-  /home/share/nfs {{WORKER2_NODE_PRIVATE_IP}}(rw,no_subtree_check,no_root_squash,async)
-  ...
-  ```
-  > `rw` - 읽기쓰기  
-  > `no_subtree_check` - 공유 디렉터리가 서브 디렉터리를 가질 수 있음  
-  > `no_root_squash` - 클라이언트가 root 권한 획득 가능, 파일생성 시 클라이언트 권한으로 생성됨  
-  > `async` - 요청에 의해 변경되기 전에 요청에 응답, 성능 향상용  
-- NFS 서버를 재시작한다.
-  ```shell
-  $ sudo /etc/init.d/nfs-kernel-server restart
-  ```
-- 설정을 확인한다.
-  ```shell
-  $ sudo exportfs -v
-  ```
-- 정상 결과
-  ```
-  /home/share/nfs
-                <world>(rw,async,wdelay,no_root_squash,no_subtree_check,sec=sys,rw,secure,no_root_squash,no_all_squash)
-  ```
-
-#### <div id='2.3.2.2'> 2.3.2.2 Client
-- 패키지 업데이트 및 업그레이드를 진행한다.
-  ```
-  $ sudo apt -y update && sudo apt -y upgrade
-  ```
-- 패키지를 설치한다.
-  ```
-  $ sudo apt -y install nfs-common attr
-  ```
-- NFS에서 사용될 디렉토리를 생성한다.
-  ```shell
-  $ sudo mkdir -p /home/share/nfs
-  ```
-- 공유 디렉토리를 설정한다.
-  ```shell
-  $ sudo vi /etc/fstab
-
-  ## 형식 : [file system] [dir] [type] [option] [dump] [pass]
-  ## 예시 : 10.10.10.122:/home/share/nfs  /home/share/nfs  nfs  noatime,nodiratime,noauto,hard,rsize=1048576,wsize=1048576,timeo=60,retrans=60  0 0
-  {NFS_SERVER_PRIVATE_IP}:/home/share/nfs  /home/share/nfs  nfs  noatime,nodiratime,noauto,hard,rsize=1048576,wsize=1048576,timeo=60,retrans=60  0 0
-  ```
-  > `noatime` - 파일시스템 meta 정보에 file의 access time 기록하지 않음  
-  > `nodiratime` - 파일시스템 meta 정보에 directory의 access time 기록하지 않음  
-  > `noauto` - 부팅 시 자동으로 mount하지 않음  
-  > `hard` - 하드 마운트  
-  > `rsize` - NFS 서버에서 파일을 읽을 때 NFS가 사용하는 바이트 수 최대 읽기 버퍼의 크기  
-  > `wsize` - NFS 서버에 파일을 쓸 때 NFS가 사용하는 바이트 수 최대 쓰기 버퍼의 크기  
-  > `timeo` - 패킷을 재전송해야한다는 결론에 도달하기 전까지의 클라이언트 대기 시간  
-  > `retrans` - `timeo`만큼 기다린 후의 재시도 횟수  
-  
-- 파일 시스템을 마운트한다.
-  ```shell
-  $ sudo mount -t nfs -o vers=4.2 {NFS_SERVER_PRIVATE_IP}:/home/share/nfs /home/share/nfs
-  ```
-- 설정을 확인한다.
-  ```
-  $ mount | grep /home/share/nfs
-  /dev/vda1 on /home/share/nfs type ext4 (rw,relatime)
-  10.10.10.122:/home/share/nfs on /home/share/nfs type nfs4 (rw,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=10.10.10.244,local_lock=none,addr=10.10.10.122)
-  ```
-
-#### <div id='2.3.2.3'> 2.3.2.3 테스트
-- NFS Client
-  ```
-  $ cd /home/share/nfs
-  
-  $ touch test.txt
-  $ printf bar | attr -s foo test.txt
-  Attribute "foo" set to a 3 byte value for test.txt:
-  bar
-  $ attr -l test.txt
-  Attribute "foo" has a 3 byte value for test.txt
-  ```
-- NFS Server
-  ```
-  $ attr -l /home/share/nfs/test.txt
-  Attribute "foo" has a 3 byte value for /home/share/nfs/test.txt
-  ```
-
-<br>
-
-## <div id='2.4'> 2.4. SSH Key 생성 및 배포
-SSH Key 생성 및 배포 이후의 모든 설치과정은 **Master Node**에서 진행한다.
-
-- Master Node에 접속하여 RSA 공개키를 생성한다.
-  ```
-  $ ssh-keygen -t rsa
-  Generating public/private rsa key pair.
-  Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa): [엔터키 입력]
-  Enter passphrase (empty for no passphrase): [엔터키 입력]
-  Enter same passphrase again: [엔터키 입력]
-  Your identification has been saved in /home/ubuntu/.ssh/id_rsa.
-  Your public key has been saved in /home/ubuntu/.ssh/id_rsa.pub.
-  The key fingerprint is:
-  SHA256:pIG4/G309Dof305mWjdNz1OORx9nQgQ3b8yUP5DzC3w ubuntu@kpaas-cp-master
-  The key's randomart image is:
-  +---[RSA 2048]----+
-  |            ..= o|
-  |   . .       * B |
-  |  . . . .   . = *|
-  | . .   +     + E.|
-  |  o   o S     +.O|
-  |   . o o .     XB|
-  |    . o . o   *oO|
-  |     .  .. o B oo|
-  |        .o. o.o  |
-  +----[SHA256]-----+
-  ```
-
-- 사용할 Master, Worker Node에 공개키를 복사한다.
-  ```shell
-  ## 출력된 공개키 복사
-
-  $ cat ~/.ssh/id_rsa.pub
-  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5QrbqzV6g4iZT4iR1u+EKKVQGqBy4DbGqH7/PVfmAYEo3CcFGhRhzLcVz3rKb+C25mOne+MaQGynZFpZk4muEAUdkpieoo+B6r2eJHjBLopn5quWJ561H7EZb/GlfC5ThjHFF+hTf5trF4boW1iZRvUM56KAwXiYosLLRBXeNlub4SKfApe8ojQh4RRzFBZP/wNbOKr+Fo6g4RQCWrr5xQCZMK3ugBzTHM+zh9Ra7tG0oCySRcFTAXXoyXnJm+PFhdR6jbkerDlUYP9RD/87p/YKS1wSXExpBkEglpbTUPMCj+t1kXXEJ68JkMrVMpeznuuopgjHYWWD2FgjFFNkp ubuntu@kpaas-cp-master
-  ```
-
-- 사용할 Master, Worker Node의 authorized_keys 파일 본문의 마지막 부분(기존 본문 내용 아래 추가)에 공개키를 복사한다.
-  ```
-  $ vi ~/.ssh/authorized_keys
-
-  ex)
-  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRueywSiuwyfmCSecHu7iwyi3xYS1xigAnhR/RMg/Ws3yOuwbKfeDFUprQR24BoMaD360uyuRaPpfqSL3LS9oRFrj0BSaQfmLcMM1+dWv+NbH/vvq7QWhIszVCLzwTqlHrhgNsh0+EMhqc15KEo5kHm7d7vLc0fB5tZkmovsUFzp01Ceo9+Qye6+j+UM6ssxdTmatoMP3ZZKZzUPF0EZwTcGG6+8rVK2G8GhTqwGLj9E+As3GB1YdOvr/fsTAi2PoxxFsypNR4NX8ZTDvRdAUzIxz8wv2VV4mADStSjFpE7HWrzr4tZUjvvVFptU4LbyON9YY4brMzjxA7kTuf/e3j Generated-by-Nova
-  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5QrbqzV6g4iZT4iR1u+EKKVQGqBy4DbGqH7/PVfmAYEo3CcFGhRhzLcVz3rKb+C25mOne+MaQGynZFpZk4muEAUdkpieoo+B6r2eJHjBLopn5quWJ561H7EZb/GlfC5ThjHFF+hTf5trF4boW1iZRvUM56KAwXiYosLLRBXeNlub4SKfApe8ojQh4RRzFBZP/wNbOKr+Fo6g4RQCWrr5xQCZMK3ugBzTHM+zh9Ra7tG0oCySRcFTAXXoyXnJm+PFhdR6jbkerDlUYP9RD/87p/YKS1wSXExpBkEglpbTUPMCj+t1kXXEJ68JkMrVMpeznuuopgjHYWWD2FgjFFNkp ubuntu@kpaas-cp-master
-  ```
-<br>
-
-## <div id='2.5'> 2.5. Kubespray 다운로드
-- git clone 명령을 통해 다음 경로에서 Kubespray 다운로드를 진행한다. 본 설치 가이드에서의 container-platform의 버전은 **v1.4.0.1**이며 Kubespray 버전은 **v2.20.0** 이다.
-  ```
-  $ git clone https://github.com/K-PaaS/container-platform-deployment.git -b v1.4.0.1
-  ```
-
-<br>
-
-## <div id='2.6'> 2.6. Kubespray 설치 준비
-
-Kubespray 설치에 필요한 환경변수를 사전 정의 후 쉘 스크립트를 통해 설치를 진행한다.
-
-- Kubespray 설치경로로 이동한다.
-  ```
-  $ cd container-platform-deployment/standalone/single_control_plane
-  ```
-
-- Kubespray 설치에 필요한 환경변수를 정의한다. HostName, IP 정보는 다음을 통해 확인할 수 있다.
-  ```
-  $ vi cp-cluster-vars.sh
-  ```
-
-  ```shell
-  ## HostName 정보 = 각 호스트의 쉘에서 hostname 명령어 입력
-  ## Private IP 정보 = 각 호스트의 쉘에서 ifconfig 입력 후 inet ip 입력
-  ## Public IP 정보 = 할당된 Public IP 정보 입력, 미 할당 시 Private IP 정보 입력
-
-  #!/bin/bash
-
-  export MASTER_NODE_HOSTNAME={Master Node의 HostName 정보 입력}
-  export MASTER_NODE_PUBLIC_IP={Master Node의 Public IP 정보 입력}
-  export MASTER_NODE_PRIVATE_IP={Master Node의 Private IP 정보 입력}
-
-  ## Worker Node Count Info
-  export WORKER_NODE_CNT={Worker Node의 갯수}
-
-  ## Add Worker Node Info
-  export WORKER1_NODE_HOSTNAME={Worker 1번 Node의 HostName 정보 입력}
-  export WORKER1_NODE_PRIVATE_IP={Worker 1번 Node의 Private IP 정보 입력}
-  export WORKER2_NODE_HOSTNAME={Worker 2번 Node의 HostName 정보 입력}
-  export WORKER2_NODE_PRIVATE_IP={Worker 2번 Node의 Private IP 정보 입력}
-  export WORKER3_NODE_HOSTNAME={Worker 3번 Node의 HostName 정보 입력}
-  export WORKER3_NODE_PRIVATE_IP={Worker 3번 Node의 Private IP 정보 입력}
-  ...
-  export WORKER{n}_NODE_HOSTNAME={Worker Node의 갯수에 맞춰 HostName 정보 변수 추가}
-  export WORKER{n}_NODE_PRIVATE_IP={Worker Node의 갯수에 맞춰 Private IP 정보 변수 추가}
-  ```
-
-- 선택할 스토리지를 선택한다.
-  Node에 볼륨 추가가 불가능할 경우 NFS를, 볼륨 추가가 가능할 경우 Rook-Ceph을 선택하는 것을 권장한다.
-  NFS 선택 시 NFS Server의 Private IP 정보를 입력한다.
-
-  ```shell
-  ...
-  ## Storage Type Info (eg. nfs, rook-ceph)
-  export STORAGE_TYPE={설치할 Storage Type 정보 입력}
-  export NFS_SERVER_PRIVATE_IP={Storage Type nfs 설정 시 NFS Server의 Private IP 정보 입력}
-  ...
-  ```
-
-<br>
-
-## <div id='2.7'> 2.7. Sidecar 설치용 Kubespray 설정 변경
-- `metrics_server_version`을 v0.6.4로 변경한다.
-  ```
-  $ vi roles/download/defaults/main.yml
-  ```
-
-  ```yaml
-  ...
-  metrics_server_version: "v0.6.4"
-  ...
-  ```
-
-- 다음 부분을 주석처리 한다.
-  ```
-  $ vi cluster.yml
-  ```
-
-  ```yaml
-  ...
-  
-  # - hosts: kube_control_plane
-  # gather_facts: False
-  # any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
-  # environment: "{{ proxy_disable_env }}"
-  # roles:
-  #   - { role: kubespray-defaults }
-  #   - { role: paasta-cp/istio }
-
-  ...
-
-  # - hosts: kube_control_plane
-  # gather_facts: False
-  # any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
-  # environment: "{{ proxy_disable_env }}"
-  # roles:
-  #   - { role: kubespray-defaults }
-  #   - { role: paasta-cp/kubeflow }
-
-  ...
-  ```
-<br>
-
-## <div id='2.8'> 2.8. Kubespray 설치
-쉘 스크립트를 통해 필요 패키지 설치, Node 구성정보 설정, Kubespray 설치정보 설정, Ansible playbook을 통한 Kubespray 설치를 일괄적으로 진행한다.
-
-```
-$ source deploy-cp-cluster.sh
-```
-
-<br>
-
-## <div id='2.9'> 2.9. Kubespray 설치 확인
-Kubernetes Node 및 kube-system Namespace의 Pod를 확인하여 Kubespray 설치를 확인한다.
-
-```
-$ kubectl get nodes
-NAME                 STATUS   ROLES                  AGE   VERSION
-kpaas-cp-master      Ready    control-plane          12m   v1.24.6
-kpaas-cp-worker-1    Ready    <none>                 10m   v1.24.6
-kpaas-cp-worker-2    Ready    <none>                 10m   v1.24.6
-kpaas-cp-worker-3    Ready    <none>                 10m   v1.24.6
-kpaas-cp-worker-4    Ready    <none>                 10m   v1.24.6
-
-$ kubectl get pods -n kube-system
-NAME                                          READY   STATUS    RESTARTS      AGE
-calico-node-d8sg6                             1/1     Running   0             9m22s
-calico-node-kfvjx                             1/1     Running   0             10m
-calico-node-khwdz                             1/1     Running   0             10m
-calico-node-nc58v                             1/1     Running   0             10m
-coredns-657959df74-td5c2                      1/1     Running   0             8m15s
-coredns-657959df74-ztnjj                      1/1     Running   0             8m7s
-dns-autoscaler-b5c786945-rhlkd                1/1     Running   0             8m9s
-kube-apiserver-kpaas-cp-master                1/1     Running   0             12m
-kube-controller-manager-kpaas-cp-master       1/1     Running   1 (11m ago)   12m
-kube-proxy-dj5c8                              1/1     Running   0             10m
-kube-proxy-kkvhk                              1/1     Running   0             10m
-kube-proxy-nfttc                              1/1     Running   0             10m
-kube-proxy-znfgk                              1/1     Running   0             10m
-kube-scheduler-kpaas-cp-master                1/1     Running   1 (11m ago)   12m
-metrics-server-5cd75b7749-xcrps               2/2     Running   0             7m57s
-nginx-proxy-kpaas-cp-worker-1                 1/1     Running   0             10m
-nginx-proxy-kpaas-cp-worker-2                 1/1     Running   0             10m
-nginx-proxy-kpaas-cp-worker-3                 1/1     Running   0             10m
-nodelocaldns-556gb                            1/1     Running   0             8m8s
-nodelocaldns-8dpnt                            1/1     Running   0             8m8s
-nodelocaldns-pvl6z                            1/1     Running   0             8m8s
-nodelocaldns-x7grn                            1/1     Running   0             8m8s
-```
-
-
-<br>
-
-### <div id='2.9.1'> ※ (참고) Kubespray 삭제
-Ansible playbook을 이용하여 Kubespray 삭제를 진행한다.
-
-```
-$ source reset-cp-cluster.sh
-```
-
-<br>
-
-# <div id='3'> 3. K-PaaS Sidecar 설치
-## <div id='3.1'> 3.1. 실행파일 소개
+## <div id='2.2'> 2.2. 실행파일 소개
 - Sidecar를 설치 & 활용하기 위해선 다음과 같은 실행파일이 필요하다.
 
-  | 이름   |      설명      |
-  |----------|-------------|
-  | [ytt](https://carvel.dev/ytt/) | Sidecar를 배포 시 사용 되는 YAML을 생성하는 툴 |
-  | [kapp](https://carvel.dev/kapp/) | Sidecar의 라이프사이클을 관리하는 툴 |
-  | [kubectl](https://github.com/kubernetes/kubectl) | Kubernetes Cluster를 제어하는 툴 |
-  | [bosh cli](https://github.com/cloudfoundry/bosh-cli) | Sidecar에서 사용될 임의의 비밀번호와 certificate를 생성하는 툴 |
-  | [cf cli](https://github.com/cloudfoundry/cli) (v7+) | Sidecar와 상호 작용하는 툴 |
+| 이름   |      설명      |
+|----------|-------------|
+| [cf cli](https://github.com/cloudfoundry/cli) (v8+) | Sidecar와 상호 작용하는 툴 |
+| [kubectl](https://github.com/kubernetes/kubectl) | Kubernetes Cluster를 제어하는 툴 |
+| [yq](https://github.com/mikefarah/yq) | YAML 편집 툴 |
+| [cmctl](https://github.com/cert-manager/cert-manager) | cert-manager와 상호 작용하는 툴 |
+| [ytt](https://carvel.dev/ytt/) | 템플릿을 이용하여 YAML을 구성하는 툴 |
+| [kapp](https://carvel.dev/kapp/) | 리소스를 어플리케이션화하여 관리하는 툴 |
+
+  
 
 <br>
 
 - Sidecar를 설치 시 사용되는 스크립트는 다음과 같다.
 
-  | 이름   |      설명      | 비고 |
-  |----------|-------------|----|
-  | utils-install.sh | Sidecar 설치 & 활용 시 사용되는 툴 설치 스크립트 | ytt, kapp, bosh cli, cf cli 설치 |
-  | variables.yml | Sidecar 설치 시 적용하는 변수 설정 파일 ||
-  | 1.generate-values.sh | Sidecar 설치 시 사용 할 비밀번호, certificate등의 설정을 갖고있는 Manifest를 생성하는 스크립트 ||
-  | 2.rendering-values.sh | 비밀번호, certificate등의 설정을 갖고있는 Manifest를 활용해 YAML을 생성하는 스크립트 ||
-  | 3.deploy-sidecar.sh | 생성된 YAML을 이용하여 Sidecar를 설치하는 스크립트 ||
-  | delete-sidecar.sh | Sidecar를 삭제하는 스크립트 ||
-  | enable-istio-cni-plugin.sh | Istio CNI Plugin을 활성화 하는 스크립트 ||
-  | deploy-inject-self-signed-cert.sh | 자체 서명된 인증서를 사용하는 Private 레지스트리 사용 시 POD에 CA를 삽입하는 보조 스크립트 | 자세한 가이드는 deploy-inject-self-signed-cert.sh 파일 안 설명이나 [cert-injection-webhook](https://github.com/vmware-tanzu/cert-injection-webhook) 참고 |
-  | delete-inject-self-signed-cert.sh | inject-self-signed-cert를 삭제하는 스크립트 |  |
-  | install-test.sh | 설치 후 Test App을 배포하여 확인하는 스크립트 ||
+| 이름   |      설명      | 비고 |
+|----------|-------------|----|
+| utils-install.sh | Sidecar 설치 & 활용 시 사용되는 툴 설치 스크립트 | cf cli, yq, cmctl, ytt, kapp 설치 |
+| variables.yml | Sidecar 설치 시 적용하는 변수 설정 파일 ||
+| 1.init.sh | Sidecar 설치 시 사용 할 namespace와 이미지 레지스트리 정보 입력하는 스크립트 ||
+| 2.deploy-dependency.sh | Sidecar를 실행 시 필요한 패키지를 설치하는 스크립트 | cert-manager, contour, kpack, servicebinding 설치 |
+| 3.deploy-sidecar.sh | Sidecar를 설치하는 스크립트 ||
+| delete-sidecar.sh | Sidecar를 삭제하는 스크립트 ||
+| delete-dependency.sh | Sidecar Dependency를 삭제하는 스크립트 ||
+| deploy-inject-self-signed-cert.sh | 자체 서명된 인증서를 사용하는 Private 레지스트리 사용 시 POD에 CA를 삽입하는 보조 스크립트 | 자세한 가이드는 deploy-inject-self-signed-cert.sh 파일 안 설명이나 [cert-injection-webhook](https://github.com/vmware-tanzu/cert-injection-webhook) 참고 |
+| delete-inject-self-signed-cert.sh | inject-self-signed-cert를 삭제하는 스크립트 |  |
+| install-test.sh | 설치 후 Test App을 배포하여 확인하는 스크립트 | |
+
 
 <br>
 
-## <div id='3.2'> 3.2. 실행파일 다운로드
+## <div id='2.3'> 2.3. 실행파일 다운로드
 
-- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v1.0.3 버전이다.
-  ```
-  $ cd $HOME
-  $ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v1.0.3.1
-  $ cd sidecar-deployment/install-scripts
-  ```
+- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v2.0.0-beta 버전이다.
 
-<br>
+```
+$ cd $HOME
+$ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v2.0.0-beta
+$ cd sidecar-deployment/install-scripts
+```
 
-- utils-install.sh 파일을 실행하여 Sidecar 설치 시 필요한 실행 파일을 설치한다.
-  ```
-  $ source utils-install.sh
-  ```
-
-<br>
-
-## <div id='3.3'> 3.3. Istio CNI Plugin 활성화
-
-- enable-istio-cni-plugin.sh 파일을 실행하여 Istio CNI Plugin을 활성화한다.
-  ```
-  $ source enable-istio-cni-plugin.sh
-  
-  ...
-  ...
-  ...
-
-  NAME                                         READY   STATUS    RESTARTS   AGE   IP               NODE                  NOMINATED NODE   READINESS GATES
-  pod/istio-operator-1-12-6-559bb4bc96-vf9nj   1/1     Running   0          2h    10.233.119.197   kpaas-cp-worker-4     <none>           <none>
-
-  NAME                            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)      AGE   SELECTOR
-  service/istio-operator-1-12-6   ClusterIP   10.233.29.48   <none>        8383/TCP     2h    name=istio-operator
-
-  NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS       IMAGES                                  SELECTOR
-  deployment.apps/istio-operator-1-12-6   1/1     1            1           2h    istio-operator   gcr.io/istio-testing/operator:latest    name=istio-operator
-
-  NAME                                               DESIRED   CURRENT   READY   AGE   CONTAINERS       IMAGES                                  SELECTOR
-  replicaset.apps/istio-operator-1-12-6-559bb4bc96   1         1         1       2h    istio-operator   gcr.io/istio-testing/operator:latest    name=istio-operator,pod-template-hash=559bb4bc96
-  ```
+- utils-install.sh 파일을 실행하여 Sidecar 설치 시 필요한 실행 파일을 설치한다.  
+```
+$ source utils-install.sh
+```
 
 <br>
 
-## <div id='3.4'> 3.4. variable 설정
+
+## <div id='2.4'> 2.4. variable 설정
 - variables.yml 파일을 편집하여 Sidecar 설치 시 옵션들을 설정한다.
-  ```
-  $ vi variables.yml
-  ```
-  ```yaml
-  ## COMMON VARIABLE
-  iaas=aws                                                    # IaaS (e.g. aws or openstack)
-  system_domain=sidecar.com                                   # sidecar system_domain (e.g. 3.35.135.135.nip.io)
-  use_lb=true                                                 # (e.g. true or false)
-  public_ip=3.35.135.135                                      # LoadbalancerIP (PublicIP associcated with system_domain, if use openstack)
-  storageclass_name=ebs-sc                                    # Storage Class Name ($ kubectl get sc)
+```
+$ vi variables.yml
+```
+```yaml
+# sidecar variable
+
+## k8s variable
+sidecar_namespace=sidecar                                    # sidecar install namespace
+root_namespace=kpaas                                         # sidecar resource namespace
+
+## dependency variable
+use_lb=true                                                  # (e.g. true or false)
+lb_ip=                                                       # if support loadBalancerIP ==> ip input (e.g. 23.45.23.45), not support loadBalancerIP ==> blank
+
+## sidecar core variable
+system_domain=sidecar.com                                    # sidecar system_domain (e.g. 3.35.135.135.nip.io)
+admin_username=sidecar-admin                                 # sidecar admin username
+user_certificate_expiration_duration_days=365                # user cert duration (days)
 
 
-  ## APP_REGISTRY VARIABLE
-  app_registry_kind=dockerhub                                 # Registry Kind (e.g. dockerhub or private)
-  app_registry_repository=repository_name                     # Repository Name
-  app_registry_id=registry_id                                 # Registry ID
-  app_registry_password=registry_password                     # Registry Password
+## registry variable
+use_dockerhub=true                                           # Registry kind (if dockerhub ==> true, harbor... ==> false)
+registry_id=registry_id                                      # Registry ID
+registry_password=registry_password                          # Registry Password
 
-  app_registry_address=harbor00.nip.io                        # if app_registry_kind==private, fill in app_registry_address
-  is_self_signed_certificate=false                            # is private registry use self-signed certificate? (e.g. true or false)
-  app_registry_cert_path=support-files/private-repository.ca  # if is_self_signed_certificate==true --> add the contents of the private-repository.ca file
-                                                              # if is_self_signed_certificate==false --> private-repository.ca is empty
-  ## PORTAL Variable
-  webuser_name="portal-web-user"
-  uaa_client_portal_secret="clientsecret"
-    
-  ## EXTERNAL BLOBSTORE VARIABLE (Option)
-  use_external_blobstore=false                                # (e.g. true or false)
-  external_blobstore_ip=192.50.50.50                          # Blobstore Address (e.g. 127.0.0.1)
-  external_blobstore_port=9000                                # Blobstore Port (e.g. 9000)
-  external_blobstore_id=admin                                 # Blobstore ID
-  external_blobstore_password=adminpw                         # Blobstore Password
-  external_blobstore_package_directory=cc-package             # Blobstore Package Directory
-  external_blobstore_droplet_directory=cc-droplet             # Blobstore Droplet Directory
-  external_blobstore_resource_directory=cc-resource           # Blobstore Resource Directory
-  external_blobstore_buildpack_directory=cc-buildpack         # Blobstore Buildpack Directory
+### registry variable (if use_dockerhub == false)
+registry_address=harbor00.nip.io                             # Registry Address
+registry_repositry_name=repository_name                      # Registry Name
+is_self_signed_certificate=false                             # is private registry use self-signed certificate? (e.g. true or false)
 
-
-  ## EXTERNAL DB VARIABLE (Option)
-  use_external_db=false                                       # (e.g. true or false)
-  external_db_kind=postgres                                   # External DB Kind(e.g. postgres or mysql)
-  external_db_ip=10.100.100.100                               # External DB IP
-  external_db_port=5432                                       # External DB Port
-  external_cc_db_id=cloud_controller                          # Cloud Controller DB ID
-  external_cc_db_password=cc_admin                            # Cloud Controller DB Password
-  external_cc_db_name=cloud_controller                        # Cloud Controller DB Name
-  external_uaa_db_id=uaa                                      # UAA DB ID
-  external_uaa_db_password=uaa_admin                          # UAA DB Password
-  external_uaa_db_name=uaa                                    # UAA DB Name
-  external_db_cert_path=support-files/db.ca                   # if DB use cert --> add the contents of the db.ca file
-                                                              # if DB don't use cert --> db.ca is empty
-  ```
+#### registry variable (if use_dockerhub == false && is_self_signed_certificate == true)
+registry_cert_path=support-files/private-repository.ca       # if is_self_signed_certificate==true --> add the contents of the private-repository.ca file
+                                                             # if is_self_signed_certificate==false --> private-repository.ca is empty
+cert_secret_name=harbor-cert                                 # ca cert secret name (k8s secret resource)
+```
 - 주요 변수의 설명은 다음과 같다.
 
-  | 이름   |      설명      |
-  |----------|-------------|
-  | iaas | Cluster가 구성된 IaaS (aws, openstack) |
-  | system_domain | Sidecar의 도메인(LoadBalancer와 연결되는 Domain) |
-  | use_lb | LoadBalancer 사용 여부 (사용 안할 시 system_domain을 Cluster Worker중 하나의 PublicIP와 연결된 system_domain으로 설정) <br> (e.g. Cluster Worker Floating IP : 3.50.50.50 -> system_domain : 3.50.50.50.nip.io 혹은 연결된 도메인 설정)|
-  | public_ip | LoadBalancer의 IP(클라우드 공급자가 제공하는 로드밸런서가 IP를 사용할 경우 설정) <br> (e.g. Openstack의 Octavia 사용 시) |
-  | storageclass_name | 사용할 Storageclass |
-  | app_registry_kind | Registry 종류 (dockerhub, private) |
-  | app_registry_address | app_registry_kind가 private일 경우 Registry 주소 입력 |
-  | use_external_blobstore | 외부 블롭스토어(minIO)를 사용할 경우 (true, false)|
-  | use_external_db | 외부 데이터베이스(postgres, mysql)를 사용할 경우 (true, false) |
+| 이름   |      설명      |
+|----------|-------------|
+| sidecar_namespace | Sidecar 설치 namespace |
+| root_namespace | Sidecar Resource namespace |
+| use_lb | true 시 LoadBalancer, false 시 NodePort 배포 |
+| lb_ip | LoadBalancerIP가 지원되는 환경일 시 입력, 미 지원 시 공백 |
+| system_domain | Sidecar 시스템 도메인 |
+| admin_username | Sidecar 관리자 이름 |
+| user_certificate_expiration_duration_days | 유저를 생성할 시 인증서 기간 |
+| use_dockerhub | true 시 Dockerhub 사용, false 시 기타 이미지 레지스트리 사용 |
+| registry_id | 이미지 레지스트리 아이디 |
+| registry_password | 이미지 레지스트리 패스워드 |
+| registry_address | 이미지 레지스트리 주소 (use_dockerhub false 시) |
+| registry_repositry_name | 이미지 레지스트리 레포지토리 이름 (use_dockerhub false 시) |
+| is_self_signed_certificate | https가 적용된 이미지 레지스트리 사용 시 self signed 인증서 사용하는 경우 true (use_dockerhub false 시) |
+| registry_cert_path | self signed 인증서 경로 (is_self_signed_certificate true 시) |
+| cert_secret_name | self signed 인증서를 저장하는 Kubernetes 이름 |
 
 <br>
 
-## <div id='3.5'> 3.5. Sidecar values 생성
-- Sidecar 설치 시 사용 할 values를 생성하는 스크립트를 실행한다.  
-  (설치 중 variables.yml을 수정하였다면 1.generate-values.sh부터 재시작 한다.)
-  ```
-  $ source 1.generate-values.sh
-  ```
-<br>
+## <div id='2.5'> 2.5. 네임스페이스 생성 & 레지스트리 정보 입력
+- 다음 스크립트를 실행하여 Sidecar에서 사용하는 네임스페이스와 레지스트리 정보를 입력한다.
 
-- Manifest 파일은 manifest/sidecar-values.yml 에 생성되며 각종 values를 확인, 수정 가능하다.   
-  (사용 가능한 변수는 [링크](https://cf-for-k8s.io/docs/platform_operators/config-values/) 에서 확인한다.)
+```
+$ source 1.init.sh
 
-  ```
-  $ vi manifest/sidecar-values.yml
-  ```
-  ```yaml
-  #@data/values
-  ---
-  system_domain: "system_domain"
-  app_domains:
-  #@overlay/append
-  - "apps.system_domain"
-  cf_admin_password: 0pnasdfggpq58hq78vwm
-
-  blobstore:
-    secret_access_key: qkw95zasdfgrhr5dg1v4
-
-  cf_db:
-    admin_password: vqorcaldasdfgz4jp8h
-  .....
-  .....
-
-  app_registry:
-    hostname: https://index.docker.io/v1/
-    repository_prefix: "dockerhub_repository_name"
-    username: "dockerhub_id"
-    password: "dockerhub_password"
-  ```
+namespace/sidecar created
+namespace/kpaas created
+secret/image-registry-credentials created
+```
 
 <br>
 
-## <div id='3.6'> 3.6. Sidecar 배포 YAML 생성
+## <div id='2.6'> 2.6. Sidecar Dependency 배포
+- Sidecar를 실행 시 필요한 패키지를 설치한다.
 
-- 만들어진 sidecar-values.yml 파일을 이용하여 Sidecar를 설치할 YAML을 렌더링하여 생성한다.  
-  (설치 중 sidecar-values.yml을 수정하였다면 2.rendering-values.sh부터 재시작 한다.)
-  ```
-  $ source 2.rendering-values.sh
-  ```
+```
+$ source 2.deploy-dependency.sh
+
+............
+
+====================cert-manager====================
+
+NAME                                           READY   STATUS    RESTARTS   AGE
+pod/cert-manager-75d57c8d4b-9xrvz              1/1     Running   0          21h
+pod/cert-manager-cainjector-69d6f4d488-l6464   1/1     Running   0          21h
+pod/cert-manager-webhook-869b6c65c4-rv9rf      1/1     Running   0          21h
+
+NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/cert-manager           ClusterIP   10.233.14.159   <none>        9402/TCP   21h
+service/cert-manager-webhook   ClusterIP   10.233.46.192   <none>        443/TCP    21h
+
+NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/cert-manager              1/1     1            1           21h
+deployment.apps/cert-manager-cainjector   1/1     1            1           21h
+deployment.apps/cert-manager-webhook      1/1     1            1           21h
+
+NAME                                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/cert-manager-75d57c8d4b              1         1         1       21h
+replicaset.apps/cert-manager-cainjector-69d6f4d488   1         1         1       21h
+replicaset.apps/cert-manager-webhook-869b6c65c4      1         1         1       21h
+
+
+======================contour=======================
+
+NAME                                READY   STATUS      RESTARTS   AGE
+pod/contour-7f56bcc895-9p9hg        1/1     Running     0          21h
+pod/contour-7f56bcc895-rhqzp        1/1     Running     0          21h
+pod/contour-certgen-v1-26-0-2zstl   0/1     Completed   0          21h
+pod/envoy-5kfzm                     2/2     Running     0          21h
+pod/envoy-6nvqw                     2/2     Running     0          21h
+pod/envoy-bkddj                     2/2     Running     0          21h
+pod/envoy-m78x7                     2/2     Running     0          21h
+
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+service/contour   ClusterIP   10.233.63.8     <none>        8001/TCP                     21h
+service/envoy     NodePort    10.233.61.191   <none>        80:32330/TCP,443:30781/TCP   21h
+
+NAME                   DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/envoy   4         4         4       4            4           <none>          21h
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/contour   2/2     2            2           21h
+
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/contour-7f56bcc895   2         2         2       21h
+
+NAME                                COMPLETIONS   DURATION   AGE
+job.batch/contour-certgen-v1-26-0   1/1           5s         21h
+
+
+======================kpack=========================
+
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/kpack-controller-7d7f477784-gjhx4   1/1     Running   0          21h
+pod/kpack-webhook-848896f7c7-hfsnx      1/1     Running   0          21h
+
+NAME                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/kpack-webhook   ClusterIP   10.233.31.79   <none>        443/TCP   21h
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/kpack-controller   1/1     1            1           21h
+deployment.apps/kpack-webhook      1/1     1            1           21h
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/kpack-controller-7d7f477784   1         1         1       21h
+replicaset.apps/kpack-webhook-848896f7c7      1         1         1       21h
+
+
+===================service-binding==================
+
+NAME                                                    READY   STATUS    RESTARTS   AGE
+pod/servicebinding-controller-manager-dff969cdc-tdbgg   2/2     Running   0          21h
+
+NAME                                                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/servicebinding-controller-manager-metrics-service   ClusterIP   10.233.37.65    <none>        8443/TCP   21h
+service/servicebinding-webhook-service                      ClusterIP   10.233.30.136   <none>        443/TCP    21h
+
+NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/servicebinding-controller-manager   1/1     1            1           21h
+
+NAME                                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/servicebinding-controller-manager-dff969cdc   1         1         1       21h
+```
 <br>
 
-- YAML 파일은 manifest/sidecar-rendered.yml에 생성되며 Kubernetes를 통해 배포되는 리소스의 확인, 수정이 가능하다.
+## <div id='2.7'> 2.7. Sidecar 설치
+- Sidecar를 설치한다.
 
-  ```
-  $ vi manifest/sidecar-rendered.yml
-  ```
-  ```yaml
-  apiVersion: kapp.k14s.io/v1alpha1
-  kind: Config
-  metadata:
-    name: kapp-version
-  minimumRequiredVersion: 0.33.0
-  ---
-  apiVersion: kapp.k14s.io/v1alpha1
-  kind: Config
-  metadata:
-    name: kapp-istio-gateway-rules
-  .....
-  ```
+```
+$ source 3.deploy-sidecar.sh
 
-<br>
+Release "sidecar" has been upgraded. Happy Helming!
+NAME: sidecar
+LAST DEPLOYED: Wed Nov 15 04:57:12 2023
+NAMESPACE: sidecar
+STATUS: deployed
+REVISION: 2
+TEST SUITE: None
+create admin
+certificatesigningrequest.certificates.k8s.io/694d3401ce46a074381d50a7dc1baf4c1e8b9a22 created
+certificatesigningrequest.certificates.k8s.io/694d3401ce46a074381d50a7dc1baf4c1e8b9a22 approved
+certificatesigningrequest.certificates.k8s.io/694d3401ce46a074381d50a7dc1baf4c1e8b9a22 condition met
+certificatesigningrequest.certificates.k8s.io "694d3401ce46a074381d50a7dc1baf4c1e8b9a22" deleted
+Cluster "cluster1" set.
+User "sidecar-admin" set.
+Context "sidecar-admin" modified.
+Switched to context "sidecar-admin".
+kubeconfig file : /home/ubuntu/sidecar-deployment/install-scripts/support-files/user/sidecar-sidecar-admin.ua.kubeconfig
 
-## <div id='3.7'> 3.7. Sidecar 설치
-- 생성된 YAML파일을 이용하여 Sidecar를 설치한다.
-  ```
-  $ source 3.deploy-sidecar.sh
+NAME                                                         READY   STATUS    RESTARTS   AGE
+pod/korifi-api-deployment-84555d64d5-9x5n2                   1/1     Running   0          2m36s
+pod/korifi-controllers-controller-manager-69996595fb-w42qs   1/1     Running   0          2m36s
 
-  ........
-  6:43:21AM:  L ok: waiting on pod/restart-workloads-for-istio1-12-6-pmtlv (v1) namespace: cf-workloads
-  6:43:25AM: ok: reconcile job/restart-workloads-for-istio1-12-6 (batch/v1) namespace: cf-workloads
-  6:43:25AM:  ^ Completed
-  6:43:25AM: ---- applying complete [301/301 done] ----
-  6:43:25AM: ---- waiting complete [301/301 done] ----
+NAME                                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/korifi-api-svc                       ClusterIP   10.233.33.57    <none>        443/TCP   2m36s
+service/korifi-controllers-webhook-service   ClusterIP   10.233.42.150   <none>        443/TCP   2m36s
 
-  Succeeded
+NAME                                                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/korifi-api-deployment                   1/1     1            1           2m36s
+deployment.apps/korifi-controllers-controller-manager   1/1     1            1           2m36s
 
-  ```
-
-- Sidecar가 정상 설치되면 POD는 다음과 같이 구성된다.
-  ```
-  $ kubectl get pods -A
-
-  NAMESPACE       NAME                                                     READY   STATUS      RESTARTS      AGE
-  cf-blobstore    cf-blobstore-minio-8699cf546d-vzx9m                      1/1     Running     0             2h
-  cf-db           cf-db-postgresql-0                                       1/1     Running     0             2h
-  cf-system       ccdb-migrate-f9srj                                       0/1     Completed   0             2h
-  cf-system       cf-api-clock-5445db578f-kqplk                            1/1     Running     0             2h
-  cf-system       cf-api-controllers-7cffd654d8-mr897                      2/2     Running     0             2h
-  cf-system       cf-api-deployment-updater-7846b77c95-q48tj               1/1     Running     0             2h
-  cf-system       cf-api-server-ccd7b6d6c-jq4l5                            5/5     Running     0             2h
-  cf-system       cf-api-worker-7cd4498648-zt7gb                           2/2     Running     0             2h
-  cf-system       eirini-api-6c7d94789c-fgwdr                              1/1     Running     0             2h
-  cf-system       eirini-app-migration-xmsp7                               0/1     Completed   0             2h
-  cf-system       eirini-event-reporter-585b97b9bd-qbl6p                   1/1     Running     0             2h
-  cf-system       eirini-event-reporter-585b97b9bd-tvshd                   1/1     Running     0             2h
-  cf-system       eirini-instance-index-env-injector-6b4c5c4bf9-22wfn      1/1     Running     0             2h
-  cf-system       eirini-task-reporter-85c5dcb56f-6whpr                    1/1     Running     0             2h
-  cf-system       eirini-task-reporter-85c5dcb56f-jhrzb                    1/1     Running     0             2h
-  cf-system       fluentd-4kbl6                                            1/1     Running     0             2h
-  cf-system       fluentd-l24lx                                            1/1     Running     0             2h
-  cf-system       fluentd-l2f8q                                            1/1     Running     0             2h
-  cf-system       fluentd-mqfrj                                            1/1     Running     0             2h
-  cf-system       fluentd-tzjlt                                            1/1     Running     0             2h
-  cf-system       log-cache-backend-6d4f986c96-rmzwm                       2/2     Running     0             2h
-  cf-system       log-cache-frontend-7799b59c9f-lv6z2                      2/2     Running     0             2h
-  cf-system       metric-proxy-5bb8d4965-h7nrb                             1/1     Running     0             2h
-  cf-system       routecontroller-887f9878d-2mjlc                          1/1     Running     0             2h
-  cf-system       uaa-8ddd86c4-k45kd                                       2/2     Running     0             2h
-  cf-workloads    restart-workloads-for-istio1-12-6-pmtlv                  0/1     Completed   0             2h
-  istio-system    istio-ingressgateway-46tx9                               2/2     Running     0             2h
-  istio-system    istio-ingressgateway-kk89r                               2/2     Running     0             2h
-  istio-system    istio-ingressgateway-zml5q                               2/2     Running     0             2h
-  istio-system    istio-ingressgateway-pkjv9                               2/2     Running     0             2h
-  istio-system    istio-ingressgateway-qdmbf                               2/2     Running     0             2h
-  istio-system    istio-operator-1-12-6-559bb4bc96-vf9nj                   1/1     Running     0             2h
-  istio-system    istiod-56c7f5bc65-mbmtt                                  1/1     Running     0             2h
-  istio-system    istiod-56c7f5bc65-qrxc6                                  1/1     Running     0             2h
-  kpack           kpack-controller-966c8d5fb-2lqmn                         2/2     Running     0             2h
-  kpack           kpack-webhook-7b57486ddf-zwfnx                           2/2     Running     0             2h
-  .....
-  ```
+NAME                                                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/korifi-api-deployment-84555d64d5                   1         1         1       2m36s
+replicaset.apps/korifi-controllers-controller-manager-69996595fb   1         1         1       2m36s
+```
 
 <br>
 
-### <div id='3.7.1'> ※ AWS 기반 Sidecar 설치 시 LoadBalancer 도메인 연결
-AWS의 LoadBalancer를 사용할 경우 Route53을 이용한 도메인의 연결이 필요하다.
-- AWS LoadBalancer 이름 확인
-
-  ```
-  $ kubectl get svc -n istio-system istio-ingressgateway
-  NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP                                                                    PORT(S)                                                      AGE
-  istio-ingressgateway   LoadBalancer   10.233.28.216   a0c35cf15801c4557a9b49b3a97f86ef-1468743017.ap-northeast-2.elb.amazonaws.com   15021:32733/TCP,80:30412/TCP,443:31913/TCP,15443:31820/TCP   2h
-  ```
-
-- Route53에서 호스팅 영역을 생성한 뒤 라우팅 대상에 LoadBalancer 이름(EXTERNAL-IP)를 입력하고 레코드를 생성한다.
-
-  ![route53](./images/sidecar/route53.PNG)
-
-<br>
-
-## <div id='3.8'> 3.8. Sidecar 로그인 및 테스트 앱 배포
+## <div id='2.8'> 2.8. Sidecar 로그인 및 테스트 앱 배포
 - 테스트 앱을 배포하여 앱이 정상 배포되는지 확인한다.
-  ```
-  # 배포 자동 테스트
-  $ source install-test.sh
-  .......
-  Waiting for app test-node-app to start...
+- Sidecar v2.0.0-beta 이상부터는 로그인하는 유저는 Kubernetes의 User로 로그인을 진행한다.
+- 배포 자동 테스트
 
-  Instances starting...
-  Instances starting...
+```
+$ ./install-test.sh
 
-  name:                test-node-app
-  requested state:     started
-  isolation segment:   placeholder
-  routes:              test-node-app.apps.system.domain
-  last uploaded:       Thu 30 Sep 07:04:54 UTC 2021
-  stack:               
-  buildpacks:          
-  isolation segment:   placeholder
+............
+Waiting for app test-node-app to start...
 
-  type:            web
-  sidecars:        
-  instances:       1/1
-  memory usage:    1024M
-  start command:   node server.js
-    state     since                  cpu    memory   disk     details
-  #0   running   2021-09-30T07:06:01Z   0.0%   0 of 0   0 of 0   
-  ==============================
-  check output 'Hello World'
-  Hello World
-  ==============================
+Instances starting...
+Instances starting...
 
+name:              temp-test-app
+requested state:   started
+routes:            temp-test-app.apps.system.domain
+last uploaded:     Wed 15 Nov 05:00:28 UTC 2023
+stack:             io.buildpacks.stacks.jammy
+buildpacks:        
 
+type:            web
+sidecars:        
+instances:       1/1
+memory usage:    1024M
+start command:   node "server.js"
+     state     since                  cpu    memory   disk     logging      details
+#0   running   2023-11-15T05:05:14Z   0.0%   0 of 0   0 of 0   0/s of 0/s   
+==============================
+check output 'Hello World'
+Hello World
+==============================
+Deleting app temp-test-app in org temp-test-org / space temp-test-space as sidecar-admin...
+OK
 
-  # 배포 수동 테스트
-  $ cf login -a api.$(grep system_domain ./manifest/sidecar-values.yml | cut -d" " -f2 | sed -e 's/\"//g') --skip-ssl-validation -u admin -p "$(grep cf_admin_password ./manifest/sidecar-values.yml | cut -d" " -f2)"
-
-  Authenticating...
-  OK
-
-  Targeted org system.
-
-  API endpoint:   https://api.<system_domain>
-  API version:    3.104.0
-  user:           admin
-  org:            system
-  space:          No space targeted, use 'cf target -s SPACE'
-
-    
-
-  $ cf create-space test-space
-  Creating space test-space in org system as admin...
-  OK
-
-  Assigning role SpaceManager to user admin in org system / space test-space as admin...
-  OK
-
-  Assigning role SpaceDeveloper to user admin in org system / space test-space as admin...
-  OK
-
-  TIP: Use 'cf target -o "system" -s "test-space"' to target new space
-
-
-
-  $ cf target -s test-space
-  API endpoint:   https://api.<system_domain>
-  API version:    3.104.0
-  user:           admin
-  org:            system
-  space:          test-space
-
-
-
-  $ cf push -p ../tests/smoke/assets/test-node-app/ test-node-app
-  Pushing app test-node-app to org system / space test-space as admin...
-  Packaging files to upload...
-  Uploading files...
-  558 B / 558 B [============================================================] 100.00% 1s
-
-  Waiting for API to complete processing files...
-  .......
-  .......
-  Build successful
-
-  Waiting for app test-node-app to start...
-
-  Instances starting...
-  Instances starting...
-
-  name:                test-node-app
-  requested state:     started
-  isolation segment:   placeholder
-  routes:              test-node-app.apps.system.domain
-  last uploaded:       Thu 30 Sep 07:04:54 UTC 2021
-  stack:               
-  buildpacks:          
-  isolation segment:   placeholder
-
-  type:            web
-  sidecars:        
-  instances:       1/1
-  memory usage:    1024M
-  start command:   node server.js
-    state     since                  cpu    memory   disk     details
-  #0   running   2021-09-30T07:06:01Z   0.0%   0 of 0   0 of 0   
-
-
-
-  $ curl -k https://test-node-app.apps.system.domain
-  Hello World
-
-  ```
-
-<br>
+Deleting org temp-test-org as sidecar-admin...
+OK
+```
   
-### <div id='3.8.1'> ※ (참고) Sidecar 삭제
+- 배포 수동 테스트
+
+```
+$ export KUBECONFIG=/home/ubuntu/sidecar-deployment/install-scripts/support-files/user/sidecar-$(grep admin_username ./variables.yml | cut -d "=" -f 2 | cut -d " " -f1).ua.kubeconfig 
+$ cf login -a api.$(grep system_domain ./variables.yml | cut -d"=" -f2 | cut -d" " -f1) --skip-ssl-validation -u $(grep admin_username ./variables.yml | cut -d "=" -f 2 | cut -d " " -f1)
+  
+API endpoint: api.system.domain
+
+Authenticating...
+OK
+
+API endpoint:   https://api.system.domain
+API version:    3.117.0+cf-k8s
+user:           sidecar-admin
+No org or space targeted, use 'cf target -o ORG -s SPACE'
+```
+```
+$ cf create-org temp-test-org
+  
+Creating org temp-test-org as sidecar-admin...
+OK
+
+TIP: Use 'cf target -o "temp-test-org"' to target new org
+```
+```
+$ cf create-space temp-test-space -o temp-test-org
+  
+Creating space temp-test-space in org temp-test-org as sidecar-admin...
+OK
+
+Assigning role SpaceManager to user sidecar-admin in org temp-test-org / space temp-test-space as sidecar-admin...
+OK
+
+Assigning role SpaceDeveloper to user sidecar-admin in org temp-test-org / space temp-test-space as sidecar-admin...
+OK
+
+TIP: Use 'cf target -o "temp-test-org" -s "temp-test-space"' to target new space
+```
+```
+$ cf target -o temp-test-org -s temp-test-space
+API endpoint:   https://api.system.domain
+API version:    3.117.0+cf-k8s
+user:           sidecar-admin
+org:            temp-test-org
+space:          temp-test-space
+```
+```
+$ cf push -p ./support-files/sample-app/ temp-test-app
+  
+Pushing app temp-test-app to org temp-test-org / space temp-test-space as sidecar-admin...
+Packaging files to upload...
+Uploading files...
+558 B / 558 B [============================================================] 100.00% 1s
+
+Waiting for API to complete processing files...
+.......
+.......
+Build successful
+
+Waiting for app test-node-app to start...
+
+Instances starting...
+Instances starting...
+
+name:              temp-test-app
+requested state:   started
+routes:            temp-test-app.apps.system.domain
+last uploaded:     Wed 15 Nov 05:00:28 UTC 2023
+stack:             io.buildpacks.stacks.jammy
+buildpacks:        
+
+type:            web
+sidecars:        
+instances:       1/1
+memory usage:    1024M
+start command:   node "server.js"
+     state     since                  cpu    memory   disk     logging      details
+#0   running   2023-11-15T05:05:14Z   0.0%   0 of 0   0 of 0   0/s of 0/s   
+```
+```
+$ curl -k https://temp-test-app.apps.system.domain
+Hello World
+```
+
+### <div id='2.8.1'> ※ (참고) Sidecar 삭제
 ```
 $ source delete-sidecar.sh
 ```
 
+### <div id='2.8.2'> ※ (참고) Sidecar Dependency 삭제 (Sidecar 삭제 후)
+```
+$ source delete-dependency.sh
+```
+
 <br>
 
-  
+## <div id='2.9'> 2.9. Sidecar User 생성
+- 운영자가 kubeconfig 파일를 생성하여 권한을 설정 한 후, 유저에게 해당 kubeconfig 파일을 전달한다.
+### <div id='2.9.1'> 2.9.1. Sidecar User Account 생성
+```
+# kubernets admin 권한으로 진행
+$ cd ~/sidecar-deployment/install-scripts/support-files/user
+$ ./create-new-ua.sh <생성할 username>
+# create-new-ua.sh 실행 시 해당 디렉토리에 kubeconfig 파일을 생성함
+```
+```
+# Sidecar admin 권한으로 Sidecar 로그인 하여 진행
+$ cf set-space-role <생성한 username> <권한을 줄 ORG이름> <권한을 줄 SPACE이름> SpaceDeveloper
+```
+### <div id='2.9.2'> 2.9.2. Sidecar Service Account 생성
+- Service Account로 유저를 생성 시 cf set-space-role 명령어로 권한을 줄 수 없기 때문에, 스크립트를 통하여 Space에 접근할수있는 Rolebinding 권한을 부여한다.
+```
+# kubernets admin 권한으로 진행
+$ cd ~/sidecar-deployment/install-scripts/support-files/user
+$ ./create-new-sa.sh <생성할 username>
+# create-new-sa.sh 실행 시 해당 디렉토리에 kubeconfig 파일을 생성함
+```
+```
+# create-new-sa.sh를 통해 Service Account를 생성할 경우,
+# Service Account namespace는 Sidecar를 배포할 시의 root_namespace 변수값과 동일하다.
+$ ./binding-sa.sh <Service Account namespace> <생성한 username> <권한을 줄 ORG이름> <권한을 줄 SPACE이름>
+```
+
+#### <div id='2.9.2.1'> ※ (참고) Container Platform Portal 계정을 사용하여 Sidecar 접속
+- Container Platform Portal 유저가 사용할 Namespace와 User ID를 운영자에게 전달하여, 운영자가 권한을 부여하여 Sidecar 접속이 가능하다.
+- 운영자는 User의 Service Account 정보를 확인하여 다음과 같이 진행한다.
+- ※ Service Account 확인방법 (Container Platform Portal > Dashboard > Managements > Users > > User > 해당 ID 클릭 > Services Account	확인)
+```
+# kubernets admin 권한으로 진행
+$ cd ~/sidecar-deployment/install-scripts/support-files/user
+$ ./binding-sa.sh <Service Account namespace> <확인 한 Service Account> <권한을 줄 ORG이름> <권한을 줄 SPACE이름>
+```
+### <div id='2.9.3'> 2.9.3. Sidecar Admin 권한 부여
+```
+# kubernets admin 권한으로 진행
+$ cd ~/sidecar-deployment/install-scripts/support-files/user
+$ ./binding-admin.sh <user 종류 (ua, sa)> <username>
+```
+
 ### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > [K-PaaS Sidecar Install](./README.md) > Sidecar

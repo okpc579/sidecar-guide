@@ -2,4 +2,4 @@
 
 |Deployment|Current Version| 
 |-------------|-------------|
-|sidecar-deployment| [1.0.3.1](https://github.com/K-PaaS/sidecar-deployment/releases/tag/v1.0.3.1) | 
+|sidecar-deployment| [2.0.0-beta](https://github.com/K-PaaS/sidecar-deployment/releases/tag/v2.0.0-beta) | 

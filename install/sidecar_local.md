@@ -45,6 +45,7 @@ kind Document : [https://kind.sigs.k8s.io/](https://kind.sigs.k8s.io/)
 $ cd $HOME
 $ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v2.0.0-beta
 $ cd sidecar-deployment/install-scripts/local
+$ chmod +x *.sh
 ```
 
 <br>

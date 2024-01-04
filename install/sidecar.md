@@ -99,6 +99,8 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 $ cd $HOME
 $ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v2.0.0-beta
 $ cd sidecar-deployment/install-scripts
+$ chmod +x ./install-test.sh
+$ chmod +x ./support-files/users/*.sh
 ```
 
 - utils-install.sh 파일을 실행하여 Sidecar 설치 시 필요한 실행 파일을 설치한다.  

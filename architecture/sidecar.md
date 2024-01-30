@@ -5,7 +5,7 @@
 <br><br>
 
 ## 시스템 구성도
-![korifi_architecture](https://github.com/cloudfoundry/korifi/blob/main/docs/images/korifi_architecture.jpg?raw=true)  
+![korifi_architecture](https://github.com/cloudfoundry/korifi/blob/v0.11.0/docs/images/korifi-high-level-architecture.drawio.png?raw=true)  
 - [korifi](https://github.com/cloudfoundry/korifi)  
 - [cert-manager](https://cert-manager.io/)  
 - [Kpack](https://github.com/pivotal/kpack)  

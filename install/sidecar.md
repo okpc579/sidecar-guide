@@ -23,9 +23,9 @@
   　2.9.2. [Sidecar Service Account 생성](#2.9.2)  
   　　※ [(참고) Container Platform Portal 계정을 사용하여 Sidecar 접속](#2.9.2.1)  
   　2.9.3. [Sidecar Admin 권한 부여](#2.9.3)  
+  ※ [(참고) Container Platform Portal Harbor를 활용한 Sidecar 설치](#2.10)  
 
 <br><br>
-
 # <div id='1'> 1. 문서 개요
 ## <div id='1.1'> 1.1. 목적
 본 문서는 K-PaaS Container-Platform 단독 배포 환경에서 K-PaaS Sidecar(이하 Sidecar)를 설치하기 위한 가이드를 제공하는 데 목적이 있다.
@@ -33,7 +33,7 @@
 <br>
 
 ## <div id='1.2'> 1.2. 범위
-본 문서는 [korifi v0.10.0](https://github.com/cloudfoundry/korifi/tree/v0.10.0), [sidecar-deployment v2.0.0-beta](https://github.com/K-PaaS/sidecar-deployment/tree/v2.0.0-beta), [cp-deployment v1.5.0](https://github.com/k-paas/cp-deployment/tree/v1.5.0)을 기준으로 작성하였다.    
+본 문서는 [korifi v0.12.0](https://github.com/cloudfoundry/korifi/tree/v0.12.0), [sidecar-deployment v2.0.0-beta2](https://github.com/K-PaaS/sidecar-deployment/tree/v2.0.0-beta2), [cp-deployment v1.5.1.1](https://github.com/k-paas/cp-deployment/tree/v1.5.1.1)을 기준으로 작성하였다.    
 본 문서는 K-PaaS Container-Platform 단독 배포(Kubespray)를 활용하여 Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.  
 본 문서는 IaaS, Kubernetes에 대한 기본 이해도가 있다는 전제하에 가이드를 진행하였다.  
 
@@ -53,6 +53,7 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 ## <div id='2.1'> 2.1. Prerequisite
 - Default StorageClass 지정
 - OCI 호환 이미지 레지스트리 제공 (e.g. [Docker Hub](https://hub.docker.com/), [Google container registry](https://cloud.google.com/container-registry),  [Azure container registry](https://hub.docker.com/), [Harbor](https://goharbor.io/), etc....)  
+- LoadBalancer 사용 
 
 <br>
 
@@ -93,11 +94,11 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 
 ## <div id='2.3'> 2.3. 실행파일 다운로드
 
-- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v2.0.0-beta 버전이다.
+- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v2.0.0-beta2 버전이다.
 
 ```
 $ cd $HOME
-$ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v2.0.0-beta
+$ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v2.0.0-beta2
 $ cd sidecar-deployment/install-scripts
 $ chmod +x ./install-test.sh
 $ chmod +x ./support-files/users/*.sh
@@ -122,10 +123,6 @@ $ vi variables.yml
 ## k8s variable
 sidecar_namespace=sidecar                                    # sidecar install namespace
 root_namespace=kpaas                                         # sidecar resource namespace
-
-## dependency variable
-use_lb=true                                                  # (e.g. true or false)
-lb_ip=                                                       # if support loadBalancerIP ==> ip input (e.g. 23.45.23.45), not support loadBalancerIP ==> blank
 
 ## sidecar core variable
 system_domain=sidecar.com                                    # sidecar system_domain (e.g. 3.35.135.135.nip.io)
@@ -154,8 +151,6 @@ cert_secret_name=harbor-cert                                 # ca cert secret na
 |----------|-------------|
 | sidecar_namespace | Sidecar 설치 namespace |
 | root_namespace | Sidecar Resource namespace |
-| use_lb | true 시 LoadBalancer, false 시 NodePort 배포 |
-| lb_ip | LoadBalancerIP가 지원되는 환경일 시 입력, 미 지원 시 공백 |
 | system_domain | Sidecar 시스템 도메인 |
 | admin_username | Sidecar 관리자 이름 |
 | user_certificate_expiration_duration_days | 유저를 생성할 시 인증서 기간 |
@@ -194,85 +189,69 @@ $ source 2.deploy-dependency.sh
 ====================cert-manager====================
 
 NAME                                           READY   STATUS    RESTARTS   AGE
-pod/cert-manager-75d57c8d4b-9xrvz              1/1     Running   0          21h
-pod/cert-manager-cainjector-69d6f4d488-l6464   1/1     Running   0          21h
-pod/cert-manager-webhook-869b6c65c4-rv9rf      1/1     Running   0          21h
+pod/cert-manager-7ddd8cdb9f-8knk9              1/1     Running   0          49s
+pod/cert-manager-cainjector-57cd76c845-pw24w   1/1     Running   0          49s
+pod/cert-manager-webhook-cf8f9f895-rcwq8       1/1     Running   0          49s
 
 NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/cert-manager           ClusterIP   10.233.14.159   <none>        9402/TCP   21h
-service/cert-manager-webhook   ClusterIP   10.233.46.192   <none>        443/TCP    21h
+service/cert-manager           ClusterIP   10.233.24.106   <none>        9402/TCP   49s
+service/cert-manager-webhook   ClusterIP   10.233.24.109   <none>        443/TCP    49s
 
 NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/cert-manager              1/1     1            1           21h
-deployment.apps/cert-manager-cainjector   1/1     1            1           21h
-deployment.apps/cert-manager-webhook      1/1     1            1           21h
+deployment.apps/cert-manager              1/1     1            1           49s
+deployment.apps/cert-manager-cainjector   1/1     1            1           49s
+deployment.apps/cert-manager-webhook      1/1     1            1           49s
 
 NAME                                                 DESIRED   CURRENT   READY   AGE
-replicaset.apps/cert-manager-75d57c8d4b              1         1         1       21h
-replicaset.apps/cert-manager-cainjector-69d6f4d488   1         1         1       21h
-replicaset.apps/cert-manager-webhook-869b6c65c4      1         1         1       21h
+replicaset.apps/cert-manager-7ddd8cdb9f              1         1         1       49s
+replicaset.apps/cert-manager-cainjector-57cd76c845   1         1         1       49s
+replicaset.apps/cert-manager-webhook-cf8f9f895       1         1         1       49s
 
 
 ======================contour=======================
 
-NAME                                READY   STATUS      RESTARTS   AGE
-pod/contour-7f56bcc895-9p9hg        1/1     Running     0          21h
-pod/contour-7f56bcc895-rhqzp        1/1     Running     0          21h
-pod/contour-certgen-v1-26-0-2zstl   0/1     Completed   0          21h
-pod/envoy-5kfzm                     2/2     Running     0          21h
-pod/envoy-6nvqw                     2/2     Running     0          21h
-pod/envoy-bkddj                     2/2     Running     0          21h
-pod/envoy-m78x7                     2/2     Running     0          21h
+NAME                                               READY   STATUS    RESTARTS   AGE
+pod/contour-gateway-provisioner-55cb599fd5-zl4jl   1/1     Running   0          25s
 
-NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
-service/contour   ClusterIP   10.233.63.8     <none>        8001/TCP                     21h
-service/envoy     NodePort    10.233.61.191   <none>        80:32330/TCP,443:30781/TCP   21h
+NAME                                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/contour-gateway-provisioner   1/1     1            1           25s
 
-NAME                   DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-daemonset.apps/envoy   4         4         4       4            4           <none>          21h
-
-NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/contour   2/2     2            2           21h
-
-NAME                                 DESIRED   CURRENT   READY   AGE
-replicaset.apps/contour-7f56bcc895   2         2         2       21h
-
-NAME                                COMPLETIONS   DURATION   AGE
-job.batch/contour-certgen-v1-26-0   1/1           5s         21h
+NAME                                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/contour-gateway-provisioner-55cb599fd5   1         1         1       25s
 
 
 ======================kpack=========================
 
-NAME                                    READY   STATUS    RESTARTS   AGE
-pod/kpack-controller-7d7f477784-gjhx4   1/1     Running   0          21h
-pod/kpack-webhook-848896f7c7-hfsnx      1/1     Running   0          21h
+NAME                                   READY   STATUS    RESTARTS   AGE
+pod/kpack-controller-f5c468f4c-bg7p5   1/1     Running   0          21s
+pod/kpack-webhook-76475959c6-tg9vj     1/1     Running   0          20s
 
 NAME                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
-service/kpack-webhook   ClusterIP   10.233.31.79   <none>        443/TCP   21h
+service/kpack-webhook   ClusterIP   10.233.21.15   <none>        443/TCP   21s
 
 NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/kpack-controller   1/1     1            1           21h
-deployment.apps/kpack-webhook      1/1     1            1           21h
+deployment.apps/kpack-controller   1/1     1            1           21s
+deployment.apps/kpack-webhook      1/1     1            1           20s
 
-NAME                                          DESIRED   CURRENT   READY   AGE
-replicaset.apps/kpack-controller-7d7f477784   1         1         1       21h
-replicaset.apps/kpack-webhook-848896f7c7      1         1         1       21h
+NAME                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/kpack-controller-f5c468f4c   1         1         1       21s
+replicaset.apps/kpack-webhook-76475959c6     1         1         1       20s
 
 
 ===================service-binding==================
 
-NAME                                                    READY   STATUS    RESTARTS   AGE
-pod/servicebinding-controller-manager-dff969cdc-tdbgg   2/2     Running   0          21h
+NAME                                                     READY   STATUS    RESTARTS   AGE
+pod/servicebinding-controller-manager-8549ff4457-xhmlm   2/2     Running   0          19s
 
-NAME                                                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/servicebinding-controller-manager-metrics-service   ClusterIP   10.233.37.65    <none>        8443/TCP   21h
-service/servicebinding-webhook-service                      ClusterIP   10.233.30.136   <none>        443/TCP    21h
+NAME                                                        TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/servicebinding-controller-manager-metrics-service   ClusterIP   10.233.20.48   <none>        8443/TCP   19s
+service/servicebinding-webhook-service                      ClusterIP   10.233.7.47    <none>        443/TCP    19s
 
 NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/servicebinding-controller-manager   1/1     1            1           21h
+deployment.apps/servicebinding-controller-manager   1/1     1            1           19s
 
-NAME                                                          DESIRED   CURRENT   READY   AGE
-replicaset.apps/servicebinding-controller-manager-dff969cdc   1         1         1       21h
+NAME                                                           DESIRED   CURRENT   READY   AGE
+replicaset.apps/servicebinding-controller-manager-8549ff4457   1         1         1       19s
 ```
 <br>
 
@@ -282,46 +261,45 @@ replicaset.apps/servicebinding-controller-manager-dff969cdc   1         1       
 ```
 $ source 3.deploy-sidecar.sh
 
-Release "sidecar" has been upgraded. Happy Helming!
+Release "sidecar" does not exist. Installing it now.
 NAME: sidecar
-LAST DEPLOYED: Wed Nov 15 04:57:12 2023
+LAST DEPLOYED: Fri Jul  5 08:24:35 2024
 NAMESPACE: sidecar
 STATUS: deployed
-REVISION: 2
+REVISION: 1
 TEST SUITE: None
 create admin
-certificatesigningrequest.certificates.k8s.io/694d3401ce46a074381d50a7dc1baf4c1e8b9a22 created
-certificatesigningrequest.certificates.k8s.io/694d3401ce46a074381d50a7dc1baf4c1e8b9a22 approved
-certificatesigningrequest.certificates.k8s.io/694d3401ce46a074381d50a7dc1baf4c1e8b9a22 condition met
-certificatesigningrequest.certificates.k8s.io "694d3401ce46a074381d50a7dc1baf4c1e8b9a22" deleted
+certificatesigningrequest.certificates.k8s.io/0d65eb34fb58c67c3ebf04e5df8ceaacb28421d6 created
+certificatesigningrequest.certificates.k8s.io/0d65eb34fb58c67c3ebf04e5df8ceaacb28421d6 approved
+certificatesigningrequest.certificates.k8s.io/0d65eb34fb58c67c3ebf04e5df8ceaacb28421d6 condition met
+certificatesigningrequest.certificates.k8s.io "0d65eb34fb58c67c3ebf04e5df8ceaacb28421d6" deleted
 Cluster "cluster1" set.
 User "sidecar-admin" set.
-Context "sidecar-admin" modified.
+Context "sidecar-admin" created.
 Switched to context "sidecar-admin".
 kubeconfig file : /home/ubuntu/sidecar-deployment/install-scripts/support-files/user/sidecar-sidecar-admin.ua.kubeconfig
-
 NAME                                                         READY   STATUS    RESTARTS   AGE
-pod/korifi-api-deployment-84555d64d5-9x5n2                   1/1     Running   0          2m36s
-pod/korifi-controllers-controller-manager-69996595fb-w42qs   1/1     Running   0          2m36s
+pod/korifi-api-deployment-7f4fccbb84-pd9k6                   1/1     Running   0          60s
+pod/korifi-controllers-controller-manager-76986974d6-sqqk6   1/1     Running   0          60s
 
 NAME                                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
-service/korifi-api-svc                       ClusterIP   10.233.33.57    <none>        443/TCP   2m36s
-service/korifi-controllers-webhook-service   ClusterIP   10.233.42.150   <none>        443/TCP   2m36s
+service/korifi-api-svc                       ClusterIP   10.233.17.37    <none>        443/TCP   60s
+service/korifi-controllers-webhook-service   ClusterIP   10.233.13.164   <none>        443/TCP   60s
 
 NAME                                                    READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/korifi-api-deployment                   1/1     1            1           2m36s
-deployment.apps/korifi-controllers-controller-manager   1/1     1            1           2m36s
+deployment.apps/korifi-api-deployment                   1/1     1            1           60s
+deployment.apps/korifi-controllers-controller-manager   1/1     1            1           60s
 
 NAME                                                               DESIRED   CURRENT   READY   AGE
-replicaset.apps/korifi-api-deployment-84555d64d5                   1         1         1       2m36s
-replicaset.apps/korifi-controllers-controller-manager-69996595fb   1         1         1       2m36s
+replicaset.apps/korifi-api-deployment-7f4fccbb84                   1         1         1       60s
+replicaset.apps/korifi-controllers-controller-manager-76986974d6   1         1         1       60s
 ```
 
 <br>
 
 ## <div id='2.8'> 2.8. Sidecar 로그인 및 테스트 앱 배포
 - 테스트 앱을 배포하여 앱이 정상 배포되는지 확인한다.
-- Sidecar v2.0.0-beta 이상부터는 로그인하는 유저는 Kubernetes의 User로 로그인을 진행한다.
+- Sidecar v2.0.0-beta2 이상부터는 로그인하는 유저는 Kubernetes의 User로 로그인을 진행한다.
 - 배포 자동 테스트
 
 ```
@@ -484,7 +462,7 @@ $ ./binding-sa.sh <Service Account namespace> <생성한 username> <권한을 �
 #### <div id='2.9.2.1'> ※ (참고) Container Platform Portal 계정을 사용하여 Sidecar 접속
 - Container Platform Portal 유저가 사용할 Namespace와 User ID를 운영자에게 전달하여, 운영자가 권한을 부여하여 Sidecar 접속이 가능하다.
 - 운영자는 User의 Service Account 정보를 확인하여 다음과 같이 진행한다.
-- ※ Service Account 확인방법 (Container Platform Portal > Dashboard > Managements > Users > > User > 해당 ID 클릭 > Services Account	확인)
+- ※ Service Account 확인방법 (Container Platform Portal > Dashboard > Managements > Users > > User > 해당 ID 클릭 > Services Account  확인)
 ```
 # kubernets admin 권한으로 진행
 $ cd ~/sidecar-deployment/install-scripts/support-files/user
@@ -496,5 +474,47 @@ $ ./binding-sa.sh <Service Account namespace> <확인 한 Service Account> <권�
 $ cd ~/sidecar-deployment/install-scripts/support-files/user
 $ ./binding-admin.sh <user 종류 (ua, sa)> <username>
 ```
+
+<br>
+
+## <div id='2.10'> ※ (참고) Container Platform Portal Harbor를 활용한 Sidecar 설치
+- 아래는 Container Platform Portal이 설치 되어있다면, 구축되어있는 Harbor를 통해 Sidecar 설치하는 예제를 안내한다.
+### <div id='2.10.1'> Harbor Project 생성
+```
+# Harbor 환경변수 등록 (CP-PORTAL SCRIPT 위치)
+$ source ~/workspace/container-platform/cp-portal-deployment/script/cp-portal-vars.sh
+
+# Harbor Project 명 입력
+$ export SIDECAR_HARBOR_PROJECT=sidecar
+
+# Harbor Project 생성
+$ curl -u $REPOSITORY_USERNAME:$REPOSITORY_PASSWORD -k $REPOSITORY_URL/api/v2.0/projects -XPOST --data-binary "{\"project_name\": \"$SIDECAR_HARBOR_PROJECT\", \"public\": false}" -H "Content-Type: application/json" -i
+
+```
+### <div id='2.10.2'> Harbor CA 확인 및 Cert Injection
+```
+$ ll /usr/local/share/ca-certificates/cp-harbor-ca.crt
+total 12
+drwxr-xr-x 2 root   root   4096 Jan  4  2024 ./
+drwxr-xr-x 5 root   root   4096 Jan  4  2024 ../
+-rw-rw-r-- 1 ubuntu ubuntu 1127 Jan  4  2024 cp-harbor-ca.crt
+
+$ cp /usr/local/share/ca-certificates/cp-harbor-ca.crt ~/sidecar-deployment/install-scripts/support-files/private-repository.ca
+
+# Cert Injection에 관한 variables.yml 설정
+$ cd ~/sidecar-deployment/install-scripts
+$ vim variables.yml
+
+# use_dockerhub=false 수정
+# registry_id 수정 (확인 : $ echo $REPOSITORY_USERNAME)
+# registry_password 수정 (확인 : $ echo $REPOSITORY_PASSWORD)
+# registry_address 수정 (확인 : $ echo $REPOSITORY_URL -> https:// 제외)
+# registry_repositry_name 수정 (확인 : $ echo $SIDECAR_HARBOR_PROJECT)
+# is_self_signed_certificate=true 수정
+```
+
+### <div id='2.10.3'> 설치 진행
+- [네임스페이스 생성 & 레지스트리 정보 입력](#2.5) 부터 가이드를 확인하여 설치를 진행한다.
+
 
 ### [Index](https://github.com/K-PaaS/Guide/blob/master/README.md) > [K-PaaS Sidecar Install](./README.md) > Sidecar

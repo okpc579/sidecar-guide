@@ -53,7 +53,8 @@ korifi github : [https://github.com/cloudfoundry/korifi](https://github.com/clou
 ## <div id='2.1'> 2.1. Prerequisite
 - Default StorageClass 지정
 - OCI 호환 이미지 레지스트리 제공 (e.g. [Docker Hub](https://hub.docker.com/), [Google container registry](https://cloud.google.com/container-registry),  [Azure container registry](https://hub.docker.com/), [Harbor](https://goharbor.io/), etc....)  
-- LoadBalancer 사용 
+- LoadBalancer 사용
+- OS - Ubuntu
 
 <br>
 

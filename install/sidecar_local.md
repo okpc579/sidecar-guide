@@ -35,6 +35,7 @@ kind Document : [https://kind.sigs.k8s.io/](https://kind.sigs.k8s.io/)
 # <div id='2'> 2. K-PaaS Sidecar - local 설치
 ## <div id='2.1'> 2.1. Prerequisite
 - 4 CPU, 8GB Memory 이상 권장
+- OS - Ubuntu
 
 <br>
 

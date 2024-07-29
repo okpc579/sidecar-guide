@@ -21,7 +21,7 @@
 <br>
 
 ## <div id='1.2'> 1.2. 범위
-본 문서는 [korifi v0.10.0](https://github.com/cloudfoundry/korifi/tree/v0.10.0), [sidecar-deployment v2.0.0-beta](https://github.com/K-PaaS/sidecar-deployment/tree/v2.0.0-beta)를 기준으로 작성하였다.  
+본 문서는 [korifi v0.12.0](https://github.com/cloudfoundry/korifi/tree/v0.12.0), [sidecar-deployment v2.0.0-beta2](https://github.com/K-PaaS/sidecar-deployment/tree/v2.0.0-beta2)를 기준으로 작성하였다.  
 본 문서는 [kind](https://kind.sigs.k8s.io/)로 Local Kubernetes Cluster를 구성 후 Sidecar 설치 기준으로 작성하였다.
 
 <br>
@@ -35,15 +35,16 @@ kind Document : [https://kind.sigs.k8s.io/](https://kind.sigs.k8s.io/)
 # <div id='2'> 2. K-PaaS Sidecar - local 설치
 ## <div id='2.1'> 2.1. Prerequisite
 - 4 CPU, 8GB Memory 이상 권장
+- OS - Ubuntu
 
 <br>
 
 ## <div id='2.2'> 2.2. 설치 파일 다운로드
 
-- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v2.0.0-beta 버전이다.
+- git clone 명령을 통해 다음 경로에서 Sidecar 다운로드를 진행한다. 본 설치 가이드에서의 Sidecar의 버전은 v2.0.0-beta2 버전이다.
 ```
 $ cd $HOME
-$ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v2.0.0-beta
+$ git clone https://github.com/K-PaaS/sidecar-deployment.git -b v2.0.0-beta2
 $ cd sidecar-deployment/install-scripts/local
 $ chmod +x *.sh
 ```

@@ -513,7 +513,7 @@ $ vim variables.yml
 # registry_repositry_name 수정 (확인 : $ echo $SIDECAR_HARBOR_PROJECT)
 # is_self_signed_certificate=true 수정
 
-$ soure deploy-inject-self-signed-cert.sh
+$ source deploy-inject-self-signed-cert.sh
 ```
 
 ### <div id='2.10.3'> 설치 진행
